@@ -1,9 +1,9 @@
-import ContactPage from "../components/contact";
+import CalculatorPage from "../components/calculator";
 
 export default function Home() {
   return (
     <div className="container mx-auto p-4">
-      <ContactPage />
+      <CalculatorPage />
     </div>
   );
 }

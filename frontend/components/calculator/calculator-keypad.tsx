@@ -1,6 +1,5 @@
-import { useState } from "react";
+import React, { PropsWithChildren } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -9,15 +8,41 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 
-export default function ScientificCalculator() {
-  // 状态管理
-  const [angleMode, setAngleMode] = useState("Deg");
-  const [numberBase, setNumberBase] = useState("Dec");
+interface CalculatorKeypadProps {
+  angleMode: string;
+  numberBase: string;
+  onAngleModeChange: (value: string) => void;
+  onNumberBaseChange: (value: string) => void;
+  onKeyPress: (value: string) => void;
+}
 
+type ButtonVariant =
+  | "link"
+  | "ghost"
+  | "outline"
+  | "default"
+  | "destructive"
+  | "secondary";
+
+interface ButtonConfig {
+  label: string | JSX.Element;
+  variant: ButtonVariant;
+  className?: string;
+  dropdownOptions?: string[];
+  onSelect?: (value: string) => void;
+}
+
+export default function CalculatorKeypad({
+  angleMode,
+  numberBase,
+  onAngleModeChange,
+  onNumberBaseChange,
+  onKeyPress,
+}: CalculatorKeypadProps) {
   const angleModes = ["Deg", "Rad", "Hyp"];
   const numberBases = ["Dec", "Bin", "Oct", "Hex"];
 
-  const buttonConfig = [
+  const buttonConfig: ButtonConfig[] = [
     // Row 1
     { label: "History", variant: "link" },
     { label: "Settings", variant: "link" },
@@ -25,13 +50,13 @@ export default function ScientificCalculator() {
       label: angleMode,
       variant: "link",
       dropdownOptions: angleModes,
-      onSelect: setAngleMode,
+      onSelect: onAngleModeChange,
     },
     {
       label: numberBase,
       variant: "link",
       dropdownOptions: numberBases,
-      onSelect: setNumberBase,
+      onSelect: onNumberBaseChange,
     },
     { label: "AC", variant: "link", className: "text-destructive" },
     { label: "Exit", variant: "link", className: "text-destructive" },
@@ -178,59 +203,29 @@ export default function ScientificCalculator() {
     { label: "=", variant: "outline", className: "col-span-2" },
   ];
 
-  return (
-    <div className="max-w-md mx-auto bg-background rounded-xl shadow-lg overflow-hidden">
-      <div className="p-4 pb-2">
-        <div className="text-sm mb-1">Scientific Calculator</div>
-        <Card>
-          <CardHeader className="pb-2">
-            <div
-              className="text-right text-2xl font-mono h-8 mb-1"
-              aria-live="polite"
-            >
-              0
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div
-              className="text-right text-sm font-mono h-4 text-muted-foreground"
-              aria-live="polite"
-            >
-              Ans = 0
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="grid grid-cols-6 gap-1 p-2">
-        {buttonConfig.map((button, index) =>
-          button.dropdownOptions ? (
-            <DropdownMenu key={index}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant={button.variant}
-                  className={`font-semibold text-xs sm:text-sm ${
-                    button.className || ""
-                  }`}
-                >
-                  {button.label}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuRadioGroup
-                  value={button.label}
-                  onValueChange={(value) => button.onSelect(value)}
-                >
-                  {button.dropdownOptions.map((option) => (
-                    <DropdownMenuRadioItem key={option} value={option}>
-                      {option}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
+  const DropdownMenuTriggerWithChildren = DropdownMenuTrigger as React.FC<
+    PropsWithChildren<{ asChild?: boolean }>
+  >;
+
+  const DropdownMenuRadioGroupWithChildren = DropdownMenuRadioGroup as React.FC<
+    PropsWithChildren<{
+      value: string;
+      onValueChange: (value: string) => void;
+    }>
+  >;
+
+  const DropdownMenuRadioItemWithChildren = DropdownMenuRadioItem as React.FC<
+    PropsWithChildren<{
+      value: string;
+    }>
+  >;
+
+  const renderButton = (button: ButtonConfig, index: number) => {
+    if (button.dropdownOptions) {
+      return (
+        <DropdownMenu key={index}>
+          <DropdownMenuTriggerWithChildren asChild>
             <Button
-              key={index}
               variant={button.variant}
               className={`font-semibold text-xs sm:text-sm ${
                 button.className || ""
@@ -238,9 +233,40 @@ export default function ScientificCalculator() {
             >
               {button.label}
             </Button>
-          )
-        )}
-      </div>
+          </DropdownMenuTriggerWithChildren>
+          <DropdownMenuContent>
+            <DropdownMenuRadioGroupWithChildren
+              value={button.label.toString()}
+              onValueChange={(value) => {
+                button.onSelect && button.onSelect(value);
+              }}
+            >
+              {button.dropdownOptions.map((option) => (
+                <DropdownMenuRadioItemWithChildren key={option} value={option}>
+                  {option}
+                </DropdownMenuRadioItemWithChildren>
+              ))}
+            </DropdownMenuRadioGroupWithChildren>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+
+    return (
+      <Button
+        key={index}
+        variant={button.variant}
+        className={`font-semibold text-xs sm:text-sm ${button.className || ""}`}
+        onClick={() => onKeyPress(button.label.toString())}
+      >
+        {button.label}
+      </Button>
+    );
+  };
+
+  return (
+    <div className="grid grid-cols-6 gap-1 p-2">
+      {buttonConfig.map((button, index) => renderButton(button, index))}
     </div>
   );
 }
