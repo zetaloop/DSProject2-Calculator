@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import CalculatorDisplay from "./calculator-display";
 import CalculatorKeypad from "./calculator-keypad";
