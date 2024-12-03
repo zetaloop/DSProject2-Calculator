@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "联系人",
-  description: "A simple contact management app",
+  title: "计算器",
+  description: "A simple calculator",
 };
 
 export default function RootLayout({
@@ -27,7 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      ></body>
+      >
+        {children}
+      </body>
     </html>
   );
 }

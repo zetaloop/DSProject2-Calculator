@@ -203,28 +203,11 @@ export default function CalculatorKeypad({
     { label: "=", variant: "outline", className: "col-span-2" },
   ];
 
-  const DropdownMenuTriggerWithChildren = DropdownMenuTrigger as React.FC<
-    PropsWithChildren<{ asChild?: boolean }>
-  >;
-
-  const DropdownMenuRadioGroupWithChildren = DropdownMenuRadioGroup as React.FC<
-    PropsWithChildren<{
-      value: string;
-      onValueChange: (value: string) => void;
-    }>
-  >;
-
-  const DropdownMenuRadioItemWithChildren = DropdownMenuRadioItem as React.FC<
-    PropsWithChildren<{
-      value: string;
-    }>
-  >;
-
   const renderButton = (button: ButtonConfig, index: number) => {
     if (button.dropdownOptions) {
       return (
         <DropdownMenu key={index}>
-          <DropdownMenuTriggerWithChildren asChild>
+          <DropdownMenuTrigger asChild>
             <Button
               variant={button.variant}
               className={`font-semibold text-xs sm:text-sm ${
@@ -233,20 +216,20 @@ export default function CalculatorKeypad({
             >
               {button.label}
             </Button>
-          </DropdownMenuTriggerWithChildren>
+          </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuRadioGroupWithChildren
+            <DropdownMenuRadioGroup
               value={button.label.toString()}
               onValueChange={(value) => {
                 button.onSelect && button.onSelect(value);
               }}
             >
               {button.dropdownOptions.map((option) => (
-                <DropdownMenuRadioItemWithChildren key={option} value={option}>
+                <DropdownMenuRadioItem key={option} value={option}>
                   {option}
-                </DropdownMenuRadioItemWithChildren>
+                </DropdownMenuRadioItem>
               ))}
-            </DropdownMenuRadioGroupWithChildren>
+            </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       );

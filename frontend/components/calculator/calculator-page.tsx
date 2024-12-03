@@ -9,8 +9,12 @@ export default function CalculatorPage() {
   const [previousValue, setPreviousValue] = useState("Ans = 0");
 
   const handleKeyPress = (value: string) => {
-    // TODO: 实现计算器按键处理逻辑
-    console.log("Key pressed:", value);
+    try {
+      // TODO: 实现计算器按键处理逻辑
+      console.log("Key pressed:", value);
+    } catch (error) {
+      console.error("按键处理错误:", error);
+    }
   };
 
   return (
