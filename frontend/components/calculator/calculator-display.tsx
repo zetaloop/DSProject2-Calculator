@@ -13,7 +13,7 @@ export default function CalculatorDisplay({
     <Card>
       <CardHeader className="pb-2">
         <div
-          className="text-right text-2xl font-mono h-8 mb-1"
+          className="text-right text-2xl font-mono h-8 mb-1 overflow-hidden whitespace-nowrap text-ellipsis"
           aria-live="polite"
         >
           {currentValue}
@@ -21,7 +21,7 @@ export default function CalculatorDisplay({
       </CardHeader>
       <CardContent>
         <div
-          className="text-right text-sm font-mono h-4 text-muted-foreground"
+          className="text-right text-sm font-mono h-4 text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis"
           aria-live="polite"
         >
           {previousValue}
