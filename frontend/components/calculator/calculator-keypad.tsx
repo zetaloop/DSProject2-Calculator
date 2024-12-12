@@ -26,6 +26,7 @@ type ButtonVariant =
 
 interface ButtonConfig {
   label: string | JSX.Element;
+  value: string;
   variant: ButtonVariant;
   className?: string;
   dropdownOptions?: string[];
@@ -44,30 +45,32 @@ export default function CalculatorKeypad({
 
   const buttonConfig: ButtonConfig[] = [
     // Row 1
-    { label: "History", variant: "link" },
-    { label: "Settings", variant: "link" },
+    { label: "History", value: "History", variant: "link" },
+    { label: "Settings", value: "Settings", variant: "link" },
     {
       label: angleMode,
+      value: angleMode,
       variant: "link",
       dropdownOptions: angleModes,
       onSelect: onAngleModeChange,
     },
     {
       label: numberBase,
+      value: numberBase,
       variant: "link",
       dropdownOptions: numberBases,
       onSelect: onNumberBaseChange,
     },
-    { label: "AC", variant: "link", className: "text-destructive" },
-    { label: "Exit", variant: "link", className: "text-destructive" },
+    { label: "AC", value: "AC", variant: "link", className: "text-destructive" },
+    { label: "Exit", value: "Exit", variant: "link", className: "text-destructive" },
 
     // Row 2
-    { label: "M+", variant: "ghost" },
-    { label: "M-", variant: "ghost" },
-    { label: "MR", variant: "ghost" },
-    { label: "MC", variant: "ghost" },
-    { label: "S⇔D", variant: "ghost" },
-    { label: "SCI", variant: "ghost" },
+    { label: "M+", value: "M+", variant: "ghost" },
+    { label: "M-", value: "M-", variant: "ghost" },
+    { label: "MR", value: "MR", variant: "ghost" },
+    { label: "MC", value: "MC", variant: "ghost" },
+    { label: "S⇔D", value: "S⇔D", variant: "ghost" },
+    { label: "SCI", value: "SCI", variant: "ghost" },
 
     // Row 3
     {
@@ -76,6 +79,7 @@ export default function CalculatorKeypad({
           x<sup>2</sup>
         </span>
       ),
+      value: "^2",
       variant: "ghost",
     },
     {
@@ -84,6 +88,7 @@ export default function CalculatorKeypad({
           x<sup>3</sup>
         </span>
       ),
+      value: "^3",
       variant: "ghost",
     },
     {
@@ -92,6 +97,7 @@ export default function CalculatorKeypad({
           x<sup>y</sup>
         </span>
       ),
+      value: "^",
       variant: "ghost",
     },
     {
@@ -100,10 +106,11 @@ export default function CalculatorKeypad({
           x<sup>-1</sup>
         </span>
       ),
+      value: "^-1",
       variant: "ghost",
     },
-    { label: "√", variant: "ghost" },
-    { label: "∛", variant: "ghost" },
+    { label: "√", value: "sqrt", variant: "ghost" },
+    { label: "∛", value: "cbrt", variant: "ghost" },
 
     // Row 4
     {
@@ -112,6 +119,7 @@ export default function CalculatorKeypad({
           10<sup>x</sup>
         </span>
       ),
+      value: "10^",
       variant: "ghost",
     },
     {
@@ -120,23 +128,25 @@ export default function CalculatorKeypad({
           e<sup>x</sup>
         </span>
       ),
+      value: "e^x",
       variant: "ghost",
     },
-    { label: "x!", variant: "ghost" },
-    { label: "log", variant: "ghost" },
-    { label: "ln", variant: "ghost" },
-    { label: "|x|", variant: "ghost" },
+    { label: "x!", value: "!", variant: "ghost" },
+    { label: "log", value: "log", variant: "ghost" },
+    { label: "ln", value: "ln", variant: "ghost" },
+    { label: "|x|", value: "abs", variant: "ghost" },
 
     // Row 5
-    { label: "sin", variant: "ghost" },
-    { label: "cos", variant: "ghost" },
-    { label: "tan", variant: "ghost" },
+    { label: "sin", value: "sin", variant: "ghost" },
+    { label: "cos", value: "cos", variant: "ghost" },
+    { label: "tan", value: "tan", variant: "ghost" },
     {
       label: (
         <span>
           sin<sup>-1</sup>
         </span>
       ),
+      value: "arcsin",
       variant: "ghost",
     },
     {
@@ -145,6 +155,7 @@ export default function CalculatorKeypad({
           cos<sup>-1</sup>
         </span>
       ),
+      value: "arccos",
       variant: "ghost",
     },
     {
@@ -153,54 +164,56 @@ export default function CalculatorKeypad({
           tan<sup>-1</sup>
         </span>
       ),
+      value: "arctan",
       variant: "ghost",
     },
 
     // Row 6
-    { label: "(", variant: "ghost" },
-    { label: ")", variant: "ghost" },
-    { label: "π", variant: "ghost" },
-    { label: "e", variant: "ghost" },
-    { label: "i", variant: "ghost" },
-    { label: "%", variant: "ghost" },
+    { label: "(", value: "(", variant: "ghost" },
+    { label: ")", value: ")", variant: "ghost" },
+    { label: "π", value: "π", variant: "ghost" },
+    { label: "e", value: "e", variant: "ghost" },
+    { label: "i", value: "i", variant: "ghost" },
+    { label: "%", value: "%", variant: "ghost" },
 
     // Row 7
-    { label: "7", variant: "outline" },
-    { label: "8", variant: "outline" },
-    { label: "9", variant: "outline" },
-    { label: "÷", variant: "outline" },
-    { label: "nPr", variant: "ghost" },
-    { label: "nCr", variant: "ghost" },
+    { label: "7", value: "7", variant: "outline" },
+    { label: "8", value: "8", variant: "outline" },
+    { label: "9", value: "9", variant: "outline" },
+    { label: "÷", value: "/", variant: "outline" },
+    { label: "nPr", value: "nPr", variant: "ghost" },
+    { label: "nCr", value: "nCr", variant: "ghost" },
 
     // Row 8
-    { label: "4", variant: "outline" },
-    { label: "5", variant: "outline" },
-    { label: "6", variant: "outline" },
-    { label: "×", variant: "outline" },
-    { label: "Mod", variant: "ghost" },
-    { label: "Ran#", variant: "ghost" },
+    { label: "4", value: "4", variant: "outline" },
+    { label: "5", value: "5", variant: "outline" },
+    { label: "6", value: "6", variant: "outline" },
+    { label: "×", value: "*", variant: "outline" },
+    { label: "Mod", value: "mod", variant: "ghost" },
+    { label: "Ran#", value: "random", variant: "ghost" },
 
     // Row 9
-    { label: "1", variant: "outline" },
-    { label: "2", variant: "outline" },
-    { label: "3", variant: "outline" },
-    { label: "-", variant: "outline" },
-    { label: "Ans", variant: "ghost" },
-    { label: "DEL", variant: "ghost", className: "text-destructive" },
+    { label: "1", value: "1", variant: "outline" },
+    { label: "2", value: "2", variant: "outline" },
+    { label: "3", value: "3", variant: "outline" },
+    { label: "-", value: "-", variant: "outline" },
+    { label: "Ans", value: "Ans", variant: "ghost" },
+    { label: "DEL", value: "DEL", variant: "ghost", className: "text-destructive" },
 
     // Row 10
-    { label: "0", variant: "outline" },
-    { label: ".", variant: "outline" },
+    { label: "0", value: "0", variant: "outline" },
+    { label: ".", value: ".", variant: "outline" },
     {
       label: (
         <span>
           ×10<sup>n</sup>
         </span>
       ),
+      value: "*10^",
       variant: "outline",
     },
-    { label: "+", variant: "outline" },
-    { label: "=", variant: "outline", className: "col-span-2" },
+    { label: "+", value: "+", variant: "outline" },
+    { label: "=", value: "=", variant: "outline", className: "col-span-2" },
   ];
 
   const renderButton = (button: ButtonConfig, index: number) => {
@@ -242,7 +255,7 @@ export default function CalculatorKeypad({
         key={index}
         variant={button.variant}
         className={`font-semibold text-xs sm:text-sm ${button.className || ""}`}
-        onClick={() => onKeyPress(button.label.toString())}
+        onClick={() => onKeyPress(button.value)}
       >
         {button.label}
       </Button>
