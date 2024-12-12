@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { sendInput } from "@/api/calculator";
 import CalculatorDisplay from "./calculator-display";
 import CalculatorKeypad from "./calculator-keypad";
@@ -10,6 +10,22 @@ export default function CalculatorPage() {
   const [currentExpression, setCurrentExpression] = useState("0");
   const [currentResult, setCurrentResult] = useState("0");
   const [internalExpression, setInternalExpression] = useState<string[]>(["Ans"]);
+
+  // 在组件加载时初始化显示值
+  useEffect(() => {
+    const initializeDisplay = async () => {
+      try {
+        const response = await sendInput("", internalExpression);
+        setInternalExpression(response.expression);
+        setCurrentExpression(response.display);
+        setCurrentResult(response.result);
+      } catch (error) {
+        console.error("初始化显示错误:", error);
+      }
+    };
+
+    initializeDisplay();
+  }, []); // 空依赖数组表示只在组件挂载时执行一次
 
   const handleKeyPress = async (value: string) => {
     try {
