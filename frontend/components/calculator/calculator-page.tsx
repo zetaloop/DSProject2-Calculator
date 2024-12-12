@@ -1,18 +1,22 @@
 "use client";
 import { useState } from "react";
+import { sendInput } from "@/api/calculator";
 import CalculatorDisplay from "./calculator-display";
 import CalculatorKeypad from "./calculator-keypad";
 
 export default function CalculatorPage() {
   const [angleMode, setAngleMode] = useState("Deg");
   const [numberBase, setNumberBase] = useState("Dec");
-  const [currentValue, setCurrentValue] = useState("0");
-  const [previousValue, setPreviousValue] = useState("Ans = 0");
+  const [currentExpression, setCurrentExpression] = useState("0");
+  const [currentResult, setCurrentResult] = useState("0");
+  const [internalExpression, setInternalExpression] = useState<string[]>(["Ans"]);
 
-  const handleKeyPress = (value: string) => {
+  const handleKeyPress = async (value: string) => {
     try {
-      // TODO: 实现计算器按键处理逻辑
-      console.log("Key pressed:", value);
+      const response = await sendInput(value, internalExpression);
+      setInternalExpression(response.expression);
+      setCurrentExpression(response.display);
+      setCurrentResult(response.result);
     } catch (error) {
       console.error("按键处理错误:", error);
     }
@@ -23,8 +27,8 @@ export default function CalculatorPage() {
       <div className="p-4 pb-2">
         <div className="text-sm mb-1">Scientific Calculator</div>
         <CalculatorDisplay
-          currentValue={currentValue}
-          previousValue={previousValue}
+          currentValue={currentExpression}
+          previousValue={`Ans = ${currentResult}`}
         />
       </div>
       <CalculatorKeypad

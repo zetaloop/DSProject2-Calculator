@@ -7,3 +7,9 @@ export interface ContactType {
   birthDate?: string;
   intro?: string;
 }
+
+export interface CalculatorResponse {
+  expression: string[];
+  display: string;
+  result: string;
+}
