@@ -65,7 +65,7 @@ if __name__ == "__main__":
     flask_thread.start()
 
     webview.create_window(
-        "联系人",
+        "",
         f"http://127.0.0.1:{PORT}",
         width=600,
         height=800,
