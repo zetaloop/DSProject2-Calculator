@@ -19,9 +19,9 @@ export default function CalculatorDisplay({
           {currentValue}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0 pb-4">
         <div
-          className="text-right text-sm font-mono h-4 text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis"
+          className="text-right text-sm font-mono h-5 text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis"
           aria-live="polite"
         >
           {previousValue}
