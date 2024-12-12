@@ -237,6 +237,9 @@ export default function CalculatorKeypad({
                 if (button.onSelect) {
                   button.onSelect(value);
                 }
+                if (button.value !== value) {
+                  onKeyPress(`${value}`);
+                }
               }}
             >
               {button.dropdownOptions.map((option) => (
