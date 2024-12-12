@@ -69,7 +69,7 @@ if __name__ == "__main__":
         f"http://127.0.0.1:{PORT}",
         width=600,
         height=800,
-        background_color="#09090b" if is_dark_mode() else "#ffffff",
+        # background_color="#09090b" if is_dark_mode() else "#ffffff",
     )
     # Windows pywebview 不支持自定义图标，其通过可执行文件指定图标
     # webview.start(icon=ICONPATH)
