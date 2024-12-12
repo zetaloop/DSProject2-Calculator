@@ -221,7 +221,9 @@ export default function CalculatorKeypad({
             <DropdownMenuRadioGroup
               value={button.label.toString()}
               onValueChange={(value) => {
-                button.onSelect && button.onSelect(value);
+                if (button.onSelect) {
+                  button.onSelect(value);
+                }
               }}
             >
               {button.dropdownOptions.map((option) => (
