@@ -42,8 +42,8 @@ export default function CalculatorPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-background rounded-xl shadow-lg overflow-hidden">
-      <div className="p-4 pb-2">
+    <div className="h-screen bg-background overflow-hidden flex flex-col">
+      <div className="p-4 pb-2 flex-shrink-0">
         <div className="text-sm mb-1">Scientific Calculator</div>
         <CalculatorDisplay
           currentValue={currentExpression}

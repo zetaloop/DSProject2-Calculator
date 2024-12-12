@@ -223,7 +223,7 @@ export default function CalculatorKeypad({
           <DropdownMenuTrigger asChild>
             <Button
               variant={button.variant}
-              className={`font-semibold text-xs sm:text-sm ${
+              className={`font-semibold text-xs sm:text-sm h-full w-full ${
                 button.className || ""
               }`}
             >
@@ -254,7 +254,7 @@ export default function CalculatorKeypad({
       <Button
         key={index}
         variant={button.variant}
-        className={`font-semibold text-xs sm:text-sm ${button.className || ""}`}
+        className={`font-semibold text-xs sm:text-sm h-full w-full ${button.className || ""}`}
         onClick={() => onKeyPress(button.value)}
       >
         {button.label}
@@ -263,7 +263,7 @@ export default function CalculatorKeypad({
   };
 
   return (
-    <div className="grid grid-cols-6 gap-1 p-2">
+    <div className="grid grid-cols-6 gap-1 p-2 flex-grow">
       {buttonConfig.map((button, index) => renderButton(button, index))}
     </div>
   );

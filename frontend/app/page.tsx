@@ -2,7 +2,7 @@ import CalculatorPage from "../components/calculator";
 
 export default function Home() {
   return (
-    <div className="container mx-auto p-4">
+    <div className="min-h-screen">
       <CalculatorPage />
     </div>
   );

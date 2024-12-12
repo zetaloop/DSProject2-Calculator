@@ -67,7 +67,7 @@ if __name__ == "__main__":
     webview.create_window(
         "联系人",
         f"http://127.0.0.1:{PORT}",
-        width=1100,
+        width=600,
         height=800,
         background_color="#09090b" if is_dark_mode() else "#ffffff",
     )
