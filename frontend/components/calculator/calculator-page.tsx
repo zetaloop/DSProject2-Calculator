@@ -10,6 +10,7 @@ export default function CalculatorPage() {
   const [currentExpression, setCurrentExpression] = useState("0");
   const [currentResult, setCurrentResult] = useState("0");
   const [internalExpression, setInternalExpression] = useState<string[]>(["Ans"]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 在组件加载时初始化显示值
   useEffect(() => {
@@ -21,11 +22,13 @@ export default function CalculatorPage() {
         setCurrentResult(response.result);
       } catch (error) {
         console.error("初始化显示错误:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     initializeDisplay();
-  }, []); // 空依赖数组表示只在组件挂载时执行一次
+  }, [internalExpression]);
 
   const handleKeyPress = async (value: string) => {
     try {
@@ -45,6 +48,7 @@ export default function CalculatorPage() {
         <CalculatorDisplay
           currentValue={currentExpression}
           previousValue={`Ans = ${currentResult}`}
+          isLoading={isLoading}
         />
       </div>
       <CalculatorKeypad
