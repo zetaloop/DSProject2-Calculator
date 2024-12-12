@@ -9,14 +9,14 @@ export default function CalculatorPage() {
   const [numberBase, setNumberBase] = useState("Dec");
   const [currentExpression, setCurrentExpression] = useState("0");
   const [currentResult, setCurrentResult] = useState("0");
-  const [internalExpression, setInternalExpression] = useState<string[]>(["Ans"]);
+  const [internalExpression, setInternalExpression] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 在组件加载时初始化显示值
+  // 使用空依赖数组，并在内部使用初始状态
   useEffect(() => {
     const initializeDisplay = async () => {
       try {
-        const response = await sendInput("", internalExpression);
+        const response = await sendInput("", []); // 直接使用初始值
         setInternalExpression(response.expression);
         setCurrentExpression(response.display);
         setCurrentResult(response.result);
@@ -28,7 +28,7 @@ export default function CalculatorPage() {
     };
 
     initializeDisplay();
-  }, [internalExpression]);
+  }, []); // 保持空依赖数组
 
   const handleKeyPress = async (value: string) => {
     try {
