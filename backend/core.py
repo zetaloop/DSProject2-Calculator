@@ -9,7 +9,7 @@ import math
 import random
 
 
-def evaluate_postfix(tokens):
+def evaluate_postfix(tokens, state):
     """计算后缀表达式的值"""
     stack = []
 
@@ -17,7 +17,7 @@ def evaluate_postfix(tokens):
         if (
             token not in precedence
             and token not in function_names
-            and token not in ["Random"]
+            and token not in ["Random", "Ans"]
         ):
             # 数字或变量
             try:
@@ -66,6 +66,9 @@ def evaluate_postfix(tokens):
 
             elif token == "Random":
                 stack.append(random.random())
+
+            elif token == "Ans":
+                stack.append(state["ans"])
 
             elif token in ["(+)", "(-)"]:
                 if not stack:
@@ -172,7 +175,6 @@ def handle_input(expression, state, key):
                 # 不改变答案状态
                 state["showing_answer"] = previous_showing_answer
                 key_list = []
-                print(f"showing_answer: {state['showing_answer']}")
             case "→":
                 # 光标右移
                 if cursor_index < len(expression) - 1:
@@ -191,6 +193,9 @@ def handle_input(expression, state, key):
                 for window in webview.windows:
                     window.destroy()
                 sys.exit(0)
+            case "Ans":
+                # 插入 Ans 变量
+                key_list = ["Ans"]
             case _:
                 key_list = [key]
 
@@ -207,19 +212,19 @@ def calculate(expression, state):
     processed = preprocess_tokens(expression)
     try:
         postfix = tokens_to_postfix(processed)
-        result = evaluate_postfix(postfix)
+        result = evaluate_postfix(postfix, state)
 
         # 格式化输出
         if isinstance(result, complex):
-            result_str = f"Ans = {result.real:.10g} + {result.imag:.10g}i"
+            return f"Ans = {result.real:.10g} + {result.imag:.10g}i", result
         else:
             str_result = f"{result:.10g}"
-            return f"Ans = {str_result}"
+            return f"Ans = {str_result}", result
     except ValueError as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", None
     except Exception as e:
         import traceback
 
         print(f"错误: {str(e)}")
         print(traceback.format_exc())
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", None

@@ -3,6 +3,13 @@ import { useState, useEffect } from "react";
 import { sendInput } from "@/api/calculator";
 import CalculatorDisplay from "./calculator-display";
 import CalculatorKeypad from "./calculator-keypad";
+import { CalculatorState } from "@/types";
+
+const initialState: CalculatorState = {
+  showing_answer: false,
+  ans: 0,
+  previous_ans: 0,
+};
 
 export default function CalculatorPage() {
   const [angleMode, setAngleMode] = useState("Deg");
@@ -11,7 +18,8 @@ export default function CalculatorPage() {
   const [isError, setIsError] = useState(false);
   const [internalExpression, setInternalExpression] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAnswerState, setIsAnswerState] = useState(false);
+  const [calculatorState, setCalculatorState] =
+    useState<CalculatorState>(initialState);
 
   const processResult = (result: string) => {
     if (result.startsWith("Error: ")) {
@@ -26,10 +34,10 @@ export default function CalculatorPage() {
   useEffect(() => {
     const initializeDisplay = async () => {
       try {
-        const response = await sendInput("AC", [], { showing_answer: false });
+        const response = await sendInput("AC", [], initialState);
         setInternalExpression(response.expression);
         setCurrentResult(processResult(response.result));
-        setIsAnswerState(response.state.showing_answer);
+        setCalculatorState(response.state);
       } catch (error) {
         console.error("初始化显示错误:", error);
       } finally {
@@ -42,12 +50,14 @@ export default function CalculatorPage() {
 
   const handleKeyPress = async (value: string) => {
     try {
-      const response = await sendInput(value, internalExpression, {
-        showing_answer: isAnswerState,
-      });
+      const response = await sendInput(
+        value,
+        internalExpression,
+        calculatorState
+      );
       setInternalExpression(response.expression);
       setCurrentResult(processResult(response.result));
-      setIsAnswerState(response.state.showing_answer);
+      setCalculatorState(response.state);
     } catch (error) {
       console.error("按键处理错误:", error);
     }
@@ -61,7 +71,7 @@ export default function CalculatorPage() {
           previousValue={currentResult}
           isLoading={isLoading}
           isError={isError}
-          isAnswerState={isAnswerState}
+          state={calculatorState}
         />
       </div>
       <CalculatorKeypad

@@ -11,8 +11,17 @@ export interface ContactType {
 export interface CalculatorResponse {
   expression: string[];
   result: string;
-  state: {
-    showing_answer: boolean;
-    [key: string]: any;
-  };
+  state: CalculatorState;
+}
+
+export interface CalculatorState {
+  showing_answer: boolean;
+  ans: number | null;
+  previous_ans: number | null;
+}
+
+export interface CalculatorResponse {
+  expression: string[];
+  result: string;
+  state: CalculatorState;
 }

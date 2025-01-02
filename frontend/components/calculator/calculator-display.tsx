@@ -1,12 +1,14 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { VariableDisplay } from "./variable-display";
+import { CalculatorState } from "@/types";
 
 interface CalculatorDisplayProps {
   currentValue: string[];
   previousValue: string;
   isLoading?: boolean;
   isError?: boolean;
-  isAnswerState?: boolean;
+  state: CalculatorState;
 }
 
 export default function CalculatorDisplay({
@@ -14,7 +16,7 @@ export default function CalculatorDisplay({
   previousValue,
   isLoading = false,
   isError = false,
-  isAnswerState = false,
+  state,
 }: CalculatorDisplayProps) {
   // 将 tokens 映射到真正的 JSX
   const renderTokens = () => {
@@ -24,7 +26,15 @@ export default function CalculatorDisplay({
         return (
           <span
             key={`cursor-${idx}`}
-            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink"
+            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
+          />
+        );
+      } else if (tk === "Ans" && state.previous_ans !== null) {
+        return (
+          <VariableDisplay
+            key={`tk-${idx}`}
+            name="Ans"
+            value={state.previous_ans.toString()}
           />
         );
       } else {
@@ -38,7 +48,7 @@ export default function CalculatorDisplay({
       <CardHeader className="pb-2">
         <div
           className={`text-right text-2xl font-mono h-8 mb-1 overflow-hidden whitespace-nowrap text-ellipsis ${
-            isAnswerState ? "text-muted-foreground" : ""
+            state.showing_answer ? "text-muted-foreground" : ""
           }`}
           aria-live="polite"
         >
@@ -54,7 +64,7 @@ export default function CalculatorDisplay({
           className={`text-right font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis transition-all ${
             isError
               ? "text-red-500 text-sm"
-              : isAnswerState
+              : state.showing_answer
               ? "text-lg font-bold"
               : "text-sm text-muted-foreground"
           }`}

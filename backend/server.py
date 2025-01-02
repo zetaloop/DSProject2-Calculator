@@ -17,10 +17,14 @@ def create_app(static_folder):
 
         key: str = data["key"]
         expression: list[str] = data["expression"]
-        state: dict[str, Any] = data.get("state", {})
+        state: dict[str, Any] = data["state"]
 
         expression: list[str] = core.handle_input(expression, state, key)
-        result = core.calculate(expression, state)
+        result, ans = core.calculate(expression, state)
+
+        if key == "=":
+            state["previous_ans"] = state["ans"]
+            state["ans"] = ans
 
         return jsonify({"expression": expression, "state": state, "result": result})
 
