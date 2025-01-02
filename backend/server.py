@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import os
 import sys
 import core
+from typing import Any
 
 
 def create_app(static_folder):
@@ -16,6 +17,7 @@ def create_app(static_folder):
 
         key: str = data["key"]
         expression: list[str] = data["expression"]
+        state: dict[str, Any] = data["state"]
 
         expression: list[str] = core.handle_input(expression, key)
         display: str = core.display(expression)

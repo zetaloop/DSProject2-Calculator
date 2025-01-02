@@ -4,7 +4,8 @@ const API_BASE_URL = "";
 
 export const sendInput = async (
   key: string,
-  expression: string[]
+  expression: string[],
+  state: Record<string, any> = {}
 ): Promise<CalculatorResponse> => {
   const response = await fetch(`${API_BASE_URL}/api/input`, {
     method: "POST",
@@ -14,6 +15,7 @@ export const sendInput = async (
     body: JSON.stringify({
       key,
       expression,
+      state,
     }),
   });
 
