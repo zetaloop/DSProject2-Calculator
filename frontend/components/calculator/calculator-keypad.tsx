@@ -149,12 +149,12 @@ export default function CalculatorKeypad({
     { label: "x!", value: "x!", shortcut: "!", variant: "ghost" },
     { label: "log", value: "log", variant: "ghost" },
     { label: "ln", value: "ln", variant: "ghost" },
-    { label: "int", value: "int", variant: "ghost" },
+    { label: "int", value: "int", shortcut: "i", variant: "ghost" },
 
     // Row 5
-    { label: "sin", value: "sin", variant: "ghost" },
-    { label: "cos", value: "cos", variant: "ghost" },
-    { label: "tan", value: "tan", variant: "ghost" },
+    { label: "sin", value: "sin", shortcut: "s", variant: "ghost" },
+    { label: "cos", value: "cos", shortcut: "c", variant: "ghost" },
+    { label: "tan", value: "tan", shortcut: "t", variant: "ghost" },
     {
       label: (
         <span>
@@ -186,7 +186,7 @@ export default function CalculatorKeypad({
     // Row 6
     { label: "(", value: "(", shortcut: "(", variant: "ghost" },
     { label: ")", value: ")", shortcut: ")", variant: "ghost" },
-    { label: "π", value: "π", variant: "ghost" },
+    { label: "π", value: "π", shortcut: "p", variant: "ghost" },
     { label: "e", value: "e", shortcut: "e", variant: "ghost" },
     { label: "%", value: "%", shortcut: "%", variant: "ghost" },
     { label: "|x|", value: "|x|", shortcut: "|", variant: "ghost" },
@@ -205,7 +205,7 @@ export default function CalculatorKeypad({
     { label: "6", value: "6", shortcut: "6", variant: "outline" },
     { label: "×", value: "*", shortcut: "*", variant: "outline" },
     { label: "Mod", value: "Mod", variant: "ghost" },
-    { label: "Ran#", value: "Ran#", variant: "ghost" },
+    { label: "Ran#", value: "Ran#", shortcut: "?", variant: "ghost" },
 
     // Row 9
     { label: "1", value: "1", shortcut: "1", variant: "outline" },
