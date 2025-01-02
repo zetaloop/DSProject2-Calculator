@@ -26,7 +26,8 @@ export default function CalculatorDisplay({
         return (
           <span
             key={`cursor-${idx}`}
-            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
+            ref={cursorRef}
+            className="inline-block h-[2em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
           />
         );
       } else if (tk === "Ans" && state.previous_ans !== null) {
@@ -35,6 +36,7 @@ export default function CalculatorDisplay({
             key={`tk-${idx}`}
             name="Ans"
             value={state.previous_ans.toString()}
+            isAnswerState={state.showing_answer}
           />
         );
       } else {
@@ -47,7 +49,8 @@ export default function CalculatorDisplay({
     <Card>
       <CardHeader className="pb-2">
         <div
-          className={`text-right text-2xl font-mono h-8 mb-1 overflow-hidden whitespace-nowrap text-ellipsis ${
+          ref={expressionRef}
+          className={`text-right text-2xl font-mono min-h-[3rem] mb-1 overflow-x-auto overflow-y-visible whitespace-nowrap custom-scrollbar ${
             state.showing_answer ? "text-muted-foreground" : ""
           }`}
           aria-live="polite"
@@ -61,7 +64,7 @@ export default function CalculatorDisplay({
       </CardHeader>
       <CardContent className="pt-0 pb-4">
         <div
-          className={`text-right font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis transition-all ${
+          className={`text-right leading-5 font-mono min-h-[1.5rem] overflow-x-auto overflow-y-visible whitespace-nowrap custom-scrollbar transition-all ${
             isError
               ? "text-red-500 text-sm"
               : state.showing_answer
