@@ -340,14 +340,19 @@ def format_number_base(number, base):
     def convert_fractional_part(fraction, base):
         """将小数部分转换为指定进制"""
         result = []
+        hex_digits = "0123456789ABCDEF"  # 十六进制数字表
         for _ in range(15):  # 限制精度为 15 位
             fraction *= base
             digit = int(fraction)
-            result.append(digit)
+            # 根据进制选择正确的数字表示
+            if base == 16:
+                result.append(hex_digits[digit])
+            else:
+                result.append(str(digit))
             fraction -= digit
             if fraction == 0:
                 break
-        return "".join(str(d) for d in result)
+        return "".join(result)
 
     if base not in ["Bin", "Oct", "Hex"]:
         raise ValueError("Base must be 'Bin', 'Oct', or 'Hex'")
