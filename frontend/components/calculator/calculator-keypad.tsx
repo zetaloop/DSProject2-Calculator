@@ -212,7 +212,7 @@ export default function CalculatorKeypad({
     { label: "2", value: "2", shortcut: "2", variant: "outline" },
     { label: "3", value: "3", shortcut: "3", variant: "outline" },
     { label: "-", value: "-", shortcut: "-", variant: "outline" },
-    { label: "Ans", value: "Ans", variant: "ghost" },
+    { label: "Ans", value: "Ans", shortcut: "a", variant: "ghost" },
     {
       label: "DEL",
       value: "DEL",
