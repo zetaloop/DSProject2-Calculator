@@ -150,19 +150,9 @@ def handle_input(expression, key):
 
 
 def calculate(expression, state):
-    """计算表达式的值，同时返回显示内容和计算结果
-
-    Args:
-        expression: 输入的表达式
-        state: 计算器状态
-
-    Returns:
-        tuple: (display, result) 其中display是表达式的显示形式，result是计算结果
-    """
-    processed = preprocess_tokens(expression)
-    display_str = " ".join(processed)
+    """计算表达式的值"""
+    processed = preprocess_tokens(expression, hidden_tokens=True)
     try:
-
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix)
 
@@ -172,14 +162,18 @@ def calculate(expression, state):
         else:
             # 去除不必要的小数点和零
             str_result = f"{result:.10g}"
-            result_str = f"Ans = {str_result}"
+            return f"Ans = {str_result}"
     except ValueError as e:
-        result_str = f"Error: {str(e)}"
+        return f"Error: {str(e)}"
     except Exception as e:
-        result_str = f"Error: {str(e)}"
         import traceback
 
         print(f"错误: {str(e)}")
         print(traceback.format_exc())
+        return f"Error: {str(e)}"
 
-    return display_str, result_str
+
+def display(expression, state):
+    """生成表达式的显示形式"""
+    processed = preprocess_tokens(expression, hidden_tokens=False)
+    return " ".join(processed)
