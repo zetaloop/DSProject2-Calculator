@@ -9,6 +9,8 @@ precedence = {
     "*": 5,
     "/": 5,
     "mod": 5,
+    "nPr": 5,
+    "nCr": 5,
     "FUNC": 6,
     "+": 7,
     "-": 7,
@@ -94,7 +96,7 @@ def preprocess_tokens(tokens):
             return True
         if t in function_names:
             return False
-        if t in ("+", "-", "*", "/", "mod", "^", "("):
+        if t in ("+", "-", "*", "/", "mod", "^", "(", "nPr", "nCr"):
             return False
         return True
 
@@ -105,7 +107,7 @@ def preprocess_tokens(tokens):
             return True
         if t in function_names:
             return True
-        if t in ("+", "-", "*", "/", "mod", "^", ")"):
+        if t in ("+", "-", "*", "/", "mod", "^", ")", "nPr", "nCr"):
             return False
         return True
 

@@ -114,6 +114,26 @@ def evaluate_postfix(tokens, state):
                     result = a % b
                 elif token == "^":
                     result = pow(a, b)
+                elif token == "nPr":
+                    # 检查参数
+                    if not (a >= 0 and b >= 0 and a.is_integer() and b.is_integer()):
+                        raise ValueError("排列数的参数必须是非负整数")
+                    if b > a:
+                        raise ValueError("排列数的第二个参数不能大于第一个参数")
+                    # 计算 P(n,r) = n!/(n-r)!
+                    n, r = int(a), int(b)
+                    result = math.factorial(n) // math.factorial(n - r)
+                elif token == "nCr":
+                    # 检查参数
+                    if not (a >= 0 and b >= 0 and a.is_integer() and b.is_integer()):
+                        raise ValueError("组合数的参数必须是非负整数")
+                    if b > a:
+                        raise ValueError("组合数的第二个参数不能大于第一个参数")
+                    # 计算 C(n,r) = n!/((n-r)!r!)
+                    n, r = int(a), int(b)
+                    result = math.factorial(n) // (
+                        math.factorial(n - r) * math.factorial(r)
+                    )
 
                 stack.append(result)
 
