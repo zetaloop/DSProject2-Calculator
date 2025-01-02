@@ -20,10 +20,9 @@ def create_app(static_folder):
         state: dict[str, Any] = data["state"]
 
         expression: list[str] = core.handle_input(expression, key)
-        display = core.display(expression, state)
         result = core.calculate(expression, state)
 
-        return jsonify({"expression": expression, "display": display, "result": result})
+        return jsonify({"expression": expression, "result": result})
 
     # 默认路由，返回前端的入口页面
     @app.route("/", defaults={"path": ""})

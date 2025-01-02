@@ -10,6 +10,5 @@ export interface ContactType {
 
 export interface CalculatorResponse {
   expression: string[];
-  display: string;
   result: string;
 }

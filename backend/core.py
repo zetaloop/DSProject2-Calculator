@@ -155,8 +155,8 @@ def handle_input(expression, key):
                     expression.pop(cursor_index + 1)
                 key_list = []
             case "AC":
-                # 全部清空，并给一个初始“0”
-                expression = ["|", "0"]
+                # 全部清空
+                expression = ["|"]
                 return expression
             case "←":
                 # 光标左移
@@ -215,24 +215,3 @@ def calculate(expression, state):
         print(f"错误: {str(e)}")
         print(traceback.format_exc())
         return f"Error: {str(e)}"
-
-
-def display(expression, state):
-    """生成表达式的显示形式（包含 '|' 光标）"""
-    return " ".join(expression)
-
-    # 然后再把光标插回原位置
-    display_tokens = []
-    idx = 0
-    for t in expression:
-        if t == "|":
-            display_tokens.append("|")  # 暂时先用 '|'，前端去换成光标
-        else:
-            # 这里要与 processed_for_display 对应地往下取一个
-            if idx < len(processed_for_display):
-                display_tokens.append(processed_for_display[idx])
-                idx += 1
-
-    # 如果 processed_for_display 比 expression 少一些括号补全，也没关系，原则上不影响展示
-    # 最后用空格拼接返回
-    return " ".join(display_tokens)

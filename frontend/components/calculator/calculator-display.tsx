@@ -2,7 +2,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface CalculatorDisplayProps {
-  currentValue: string;
+  currentValue: string[];
   previousValue: string;
   isLoading?: boolean;
   isError?: boolean;
@@ -14,19 +14,15 @@ export default function CalculatorDisplay({
   isLoading = false,
   isError = false,
 }: CalculatorDisplayProps) {
-  // 将后端的 currentValue 拆分为 tokens
-  const tokens = currentValue.split(" ");
-
   // 将 tokens 映射到真正的 JSX
   const renderTokens = () => {
-    return tokens.map((tk, idx) => {
+    return currentValue.map((tk, idx) => {
       if (tk === "|") {
         // 这里使用一个带有闪烁动画的光标
         return (
           <span
             key={`cursor-${idx}`}
-            className="inline-block w-[3px] bg-current animate-blink mx-[1px]"
-            style={{ height: "1.5em", verticalAlign: "middle" }}
+            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
           />
         );
       } else {

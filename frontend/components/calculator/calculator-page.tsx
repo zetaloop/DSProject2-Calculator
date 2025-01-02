@@ -7,7 +7,6 @@ import CalculatorKeypad from "./calculator-keypad";
 export default function CalculatorPage() {
   const [angleMode, setAngleMode] = useState("Deg");
   const [numberBase, setNumberBase] = useState("Dec");
-  const [currentExpression, setCurrentExpression] = useState("0");
   const [currentResult, setCurrentResult] = useState("0");
   const [isError, setIsError] = useState(false);
   const [internalExpression, setInternalExpression] = useState<string[]>([]);
@@ -28,7 +27,6 @@ export default function CalculatorPage() {
       try {
         const response = await sendInput("AC", []);
         setInternalExpression(response.expression);
-        setCurrentExpression(response.display);
         setCurrentResult(processResult(response.result));
       } catch (error) {
         console.error("初始化显示错误:", error);
@@ -44,7 +42,6 @@ export default function CalculatorPage() {
     try {
       const response = await sendInput(value, internalExpression);
       setInternalExpression(response.expression);
-      setCurrentExpression(response.display);
       setCurrentResult(processResult(response.result));
     } catch (error) {
       console.error("按键处理错误:", error);
@@ -55,7 +52,7 @@ export default function CalculatorPage() {
     <div className="h-screen bg-background overflow-hidden flex flex-col">
       <div className="p-4 pb-2 flex-shrink-0">
         <CalculatorDisplay
-          currentValue={currentExpression}
+          currentValue={internalExpression}
           previousValue={currentResult}
           isLoading={isLoading}
           isError={isError}
