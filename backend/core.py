@@ -7,6 +7,7 @@ from preprocess import (
 )
 import math
 import random
+from fractions import Fraction
 
 
 def evaluate_postfix(tokens, state):
@@ -193,6 +194,14 @@ def handle_input(expression, state, key):
             case "SCI":
                 # 切换科学计数法状态
                 state["use_scientific"] = not state.get("use_scientific", False)
+                if state["use_scientific"]:
+                    state["use_fraction"] = False
+                key_list = []
+            case "S⇔D":
+                # 切换分数显示状态
+                state["use_fraction"] = not state.get("use_fraction", False)
+                if state["use_fraction"]:
+                    state["use_scientific"] = False
                 key_list = []
             case "DEL":
                 # 删除光标左侧的一个 token
@@ -269,9 +278,23 @@ def calculate(expression, state):
         return f"Error: {str(e)}", 0
 
 
+def decimal_to_fraction(decimal):
+    """将小数转换为最简分数"""
+    try:
+        # 使用 Fraction 自动处理转换和化简
+        frac = Fraction(decimal).limit_denominator()
+        return f"{frac.numerator}/{frac.denominator}"
+    except (ValueError, OverflowError):
+        # 如果转换失败，返回原始数字
+        return f"{decimal}/1"
+
+
 def format_result(result, state):
+    """格式化结果"""
     if state.get("use_scientific", False):
         str_result = f"{result:.30e}"
+    elif state.get("use_fraction", False):
+        str_result = decimal_to_fraction(result)
     else:
         str_result = f"{result:.15g}"
 

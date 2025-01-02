@@ -125,6 +125,14 @@ export default function CalculatorDisplay({
             SCI
           </Badge>
         )}
+        {state.use_fraction && (
+          <Badge
+            variant="secondary"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+          >
+            S⇔D
+          </Badge>
+        )}
       </CardContent>
     </Card>
   );

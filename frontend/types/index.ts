@@ -20,6 +20,7 @@ export interface CalculatorState {
   _current_ans: number;
   _predicted_ans: number;
   use_scientific: boolean;
+  use_fraction: boolean;
 }
 
 export interface CalculatorResponse {
