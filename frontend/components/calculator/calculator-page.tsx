@@ -9,8 +9,18 @@ export default function CalculatorPage() {
   const [numberBase, setNumberBase] = useState("Dec");
   const [currentExpression, setCurrentExpression] = useState("0");
   const [currentResult, setCurrentResult] = useState("0");
+  const [isError, setIsError] = useState(false);
   const [internalExpression, setInternalExpression] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const processResult = (result: string) => {
+    if (result.startsWith("Error: ")) {
+      setIsError(true);
+      return result.substring(7); // 移除 "Error: " 前缀
+    }
+    setIsError(false);
+    return result;
+  };
 
   // 使用空依赖数组，并在内部使用初始状态
   useEffect(() => {
@@ -19,7 +29,7 @@ export default function CalculatorPage() {
         const response = await sendInput("", []); // 直接使用初始值
         setInternalExpression(response.expression);
         setCurrentExpression(response.display);
-        setCurrentResult(response.result);
+        setCurrentResult(processResult(response.result));
       } catch (error) {
         console.error("初始化显示错误:", error);
       } finally {
@@ -35,7 +45,7 @@ export default function CalculatorPage() {
       const response = await sendInput(value, internalExpression);
       setInternalExpression(response.expression);
       setCurrentExpression(response.display);
-      setCurrentResult(response.result);
+      setCurrentResult(processResult(response.result));
     } catch (error) {
       console.error("按键处理错误:", error);
     }
@@ -48,6 +58,7 @@ export default function CalculatorPage() {
           currentValue={currentExpression}
           previousValue={currentResult}
           isLoading={isLoading}
+          isError={isError}
         />
       </div>
       <CalculatorKeypad

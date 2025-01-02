@@ -5,12 +5,14 @@ interface CalculatorDisplayProps {
   currentValue: string;
   previousValue: string;
   isLoading?: boolean;
+  isError?: boolean;
 }
 
 export default function CalculatorDisplay({
   currentValue,
   previousValue,
   isLoading = false,
+  isError = false,
 }: CalculatorDisplayProps) {
   return (
     <Card>
@@ -28,7 +30,9 @@ export default function CalculatorDisplay({
       </CardHeader>
       <CardContent className="pt-0 pb-4">
         <div
-          className="text-right text-sm font-mono h-5 text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis"
+          className={`text-right text-sm font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis ${
+            isError ? "text-red-500" : "text-muted-foreground"
+          }`}
           aria-live="polite"
         >
           {isLoading ? (
