@@ -149,7 +149,7 @@ export default function CalculatorKeypad({
     { label: "x!", value: "x!", shortcut: "!", variant: "ghost" },
     { label: "log", value: "log", variant: "ghost" },
     { label: "ln", value: "ln", variant: "ghost" },
-    { label: "|x|", value: "|x|", shortcut: "|", variant: "ghost" },
+    { label: "int", value: "int", variant: "ghost" },
 
     // Row 5
     { label: "sin", value: "sin", variant: "ghost" },
@@ -188,8 +188,8 @@ export default function CalculatorKeypad({
     { label: ")", value: ")", shortcut: ")", variant: "ghost" },
     { label: "π", value: "π", variant: "ghost" },
     { label: "e", value: "e", shortcut: "e", variant: "ghost" },
-    { label: "int", value: "int", variant: "ghost" },
     { label: "%", value: "%", shortcut: "%", variant: "ghost" },
+    { label: "|x|", value: "|x|", shortcut: "|", variant: "ghost" },
 
     // Row 7
     { label: "7", value: "7", shortcut: "7", variant: "outline" },
