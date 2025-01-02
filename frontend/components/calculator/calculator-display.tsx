@@ -25,8 +25,8 @@ export default function CalculatorDisplay({
         return (
           <span
             key={`cursor-${idx}`}
-            className="inline-block w-[1px] bg-current animate-blink mx-[1px]"
-            style={{ height: "1em", verticalAlign: "middle" }}
+            className="inline-block w-[3px] bg-current animate-blink mx-[1px]"
+            style={{ height: "1.5em", verticalAlign: "middle" }}
           />
         );
       } else {
