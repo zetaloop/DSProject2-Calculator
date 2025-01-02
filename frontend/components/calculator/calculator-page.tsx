@@ -7,8 +7,10 @@ import { CalculatorState } from "@/types";
 
 const initialState: CalculatorState = {
   showing_answer: false,
-  _current_ans: 0,
   ans: 0,
+  _current_ans: 0,
+  _predicted_ans: 0,
+  use_scientific: false,
 };
 
 export default function CalculatorPage() {

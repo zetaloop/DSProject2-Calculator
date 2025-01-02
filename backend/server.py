@@ -20,12 +20,18 @@ def create_app(static_folder):
         state: dict[str, Any] = data["state"]
 
         expression: list[str] = core.handle_input(expression, state, key)
-        result, ans = core.calculate(expression, state)
 
         # state ans：当前运算中使用的 Ans 变量值
         # state _current_ans：最新完成（=）的运算结果
-        if key == "=":
-            state["_current_ans"] = ans
+        # state _previous_ans：最新预测的运算结果
+        if key in ["SCI"]:
+            # 仅格式化
+            result = core.format_result(state["_predicted_ans"], state)
+        else:
+            # 正常计算
+            result, ans = core.calculate(expression, state)
+            if key == "=":
+                state["_current_ans"] = ans
 
         return jsonify({"expression": expression, "state": state, "result": result})
 

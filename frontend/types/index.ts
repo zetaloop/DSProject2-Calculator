@@ -16,8 +16,10 @@ export interface CalculatorResponse {
 
 export interface CalculatorState {
   showing_answer: boolean;
-  _current_ans: number;
   ans: number;
+  _current_ans: number;
+  _predicted_ans: number;
+  use_scientific: boolean;
 }
 
 export interface CalculatorResponse {

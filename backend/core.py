@@ -187,6 +187,10 @@ def handle_input(expression, state, key):
             case "=":
                 state["showing_answer"] = True
                 key_list = []
+            case "SCI":
+                # 切换科学计数法状态
+                state["use_scientific"] = not state.get("use_scientific", False)
+                key_list = []
             case "DEL":
                 # 删除光标左侧的一个 token
                 if cursor_index > 0:
@@ -246,10 +250,12 @@ def calculate(expression, state):
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix, state)
 
-        # 格式化输出
-        str_result = f"{result:g}"
-        prefix = "Ans = " if state["showing_answer"] else "Ans (predicted) = "
-        return f"{prefix}{str_result}", result
+        # 更新预测结果
+        state["_predicted_ans"] = result
+
+        # 格式化结果
+        str_result = format_result(result, state)
+        return str_result, result
     except ValueError as e:
         return f"Error: {str(e)}", None
     except Exception as e:
@@ -258,3 +264,13 @@ def calculate(expression, state):
         print(f"错误: {str(e)}")
         print(traceback.format_exc())
         return f"Error: {str(e)}", None
+
+
+def format_result(result, state):
+    if state.get("use_scientific", False):
+        str_result = f"{result:e}"
+    else:
+        str_result = f"{result:g}"
+
+    prefix = "Ans = " if state["showing_answer"] else "Ans (predicted) = "
+    return f"{prefix}{str_result}"
