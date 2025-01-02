@@ -24,7 +24,7 @@ export default function CalculatorDisplay({
         return (
           <span
             key={`cursor-${idx}`}
-            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
+            className="inline-block h-[1.5em] w-[3px] align-middle bg-current animate-blink"
           />
         );
       } else {
@@ -51,12 +51,12 @@ export default function CalculatorDisplay({
       </CardHeader>
       <CardContent className="pt-0 pb-4">
         <div
-          className={`text-right text-sm font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis ${
+          className={`text-right font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis transition-all ${
             isError
-              ? "text-red-500"
+              ? "text-red-500 text-sm"
               : isAnswerState
-              ? ""
-              : "text-muted-foreground"
+              ? "text-lg font-bold"
+              : "text-sm text-muted-foreground"
           }`}
           aria-live="polite"
         >
