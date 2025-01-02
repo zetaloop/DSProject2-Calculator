@@ -29,12 +29,12 @@ def evaluate_postfix(tokens):
                     value = float(token)
                 stack.append(value)
             except ValueError:
-                raise ValueError(f"无法识别的token: {token}")
+                raise ValueError(f"语法错误: {token}")
         else:
             # 运算符或函数
             if token in suffix_ops or token in function_names:
                 if not stack:
-                    raise ValueError("表达式错误：缺少操作数")
+                    raise ValueError("缺少操作数")
                 x = stack.pop()
 
                 if token == "!":
@@ -67,7 +67,7 @@ def evaluate_postfix(tokens):
 
             elif token in ["(+)", "(-)"]:
                 if not stack:
-                    raise ValueError("表达式错误：缺少操作数")
+                    raise ValueError("缺少操作数")
                 x = stack.pop()
                 if token == "(-)":
                     x = -x
@@ -75,7 +75,7 @@ def evaluate_postfix(tokens):
 
             else:  # 二元运算符
                 if len(stack) < 2:
-                    raise ValueError("表达式错误：缺少操作数")
+                    raise ValueError("缺少操作数")
                 b = stack.pop()
                 a = stack.pop()
 
@@ -99,9 +99,9 @@ def evaluate_postfix(tokens):
                 stack.append(result)
 
     if not stack:
-        raise ValueError("表达式为空")
+        stack = [0]
     if len(stack) > 1:
-        raise ValueError("表达式错误：操作符不足")
+        raise ValueError("操作符不足")
 
     return stack[0]
 
@@ -124,13 +124,17 @@ def handle_input(expression, key):
         "Ran#": ["Random"],
         "*10^n": ["*", "10", "^"],
     }
-    if not key:  # 仅当初始化时传回空键
+    if not key:  # 仅当初始化时前端会给出空键
         expression = []
         key = "0"
     if key in OP_MAPEX:
         key = OP_MAPEX[key]
     else:
         match key:
+            case "DEL":
+                if expression:
+                    expression.pop()
+                key = []
             case "Exit":
                 import sys
                 import webview
@@ -173,4 +177,9 @@ def calculate(expression, state):
         result_str = f"Error: {str(e)}"
     except Exception as e:
         result_str = f"Error: {str(e)}"
+        import traceback
+
+        print(f"错误: {str(e)}")
+        print(traceback.format_exc())
+
     return display_str, result_str
