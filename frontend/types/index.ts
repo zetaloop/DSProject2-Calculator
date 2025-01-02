@@ -22,6 +22,7 @@ export interface CalculatorState {
   use_scientific: boolean;
   use_fraction: boolean;
   memory: number;
+  number_base: "Dec" | "Bin" | "Oct" | "Hex";
 }
 
 export interface CalculatorResponse {

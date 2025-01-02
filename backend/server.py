@@ -24,7 +24,7 @@ def create_app(static_folder):
         # state ans：当前运算中使用的 Ans 变量值
         # state _current_ans：最新完成（=）的运算结果
         # state _previous_ans：最新预测的运算结果
-        if key in ["SCI", "S⇔D"]:
+        if key in ["SCI", "S⇔D", "Dec", "Bin", "Oct", "Hex"]:
             # 仅格式化
             result = core.format_result(state["_predicted_ans"], state)
         else:

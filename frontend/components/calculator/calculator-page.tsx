@@ -13,11 +13,11 @@ const initialState: CalculatorState = {
   use_scientific: false,
   use_fraction: false,
   memory: 0,
+  number_base: "Dec",
 };
 
 export default function CalculatorPage() {
   const [angleMode, setAngleMode] = useState("Deg");
-  const [numberBase, setNumberBase] = useState("Dec");
   const [currentResult, setCurrentResult] = useState("0");
   const [isError, setIsError] = useState(false);
   const [internalExpression, setInternalExpression] = useState<string[]>([]);
@@ -67,6 +67,11 @@ export default function CalculatorPage() {
     }
   };
 
+  // 处理进制变化
+  const handleNumberBaseChange = (value: string) => {
+    handleKeyPress(value);
+  };
+
   return (
     <div className="h-screen bg-background overflow-hidden flex flex-col">
       <div className="p-4 pb-2 flex-shrink-0">
@@ -80,9 +85,9 @@ export default function CalculatorPage() {
       </div>
       <CalculatorKeypad
         angleMode={angleMode}
-        numberBase={numberBase}
+        numberBase={calculatorState.number_base}
         onAngleModeChange={setAngleMode}
-        onNumberBaseChange={setNumberBase}
+        onNumberBaseChange={handleNumberBaseChange}
         onKeyPress={handleKeyPress}
       />
     </div>

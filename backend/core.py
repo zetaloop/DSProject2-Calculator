@@ -197,14 +197,19 @@ def handle_input(expression, state, key):
             case "SCI":
                 # 切换科学计数法状态
                 state["use_scientific"] = not state.get("use_scientific", False)
-                if state["use_scientific"]:
-                    state["use_fraction"] = False
+                state["use_fraction"] = False
+                state["number_base"] = "Dec"
                 key_list = []
             case "S⇔D":
                 # 切换分数显示状态
                 state["use_fraction"] = not state.get("use_fraction", False)
-                if state["use_fraction"]:
-                    state["use_scientific"] = False
+                state["use_scientific"] = False
+                state["number_base"] = "Dec"
+                key_list = []
+            case "Dec" | "Bin" | "Oct" | "Hex":
+                state["number_base"] = key
+                state["use_scientific"] = False
+                state["use_fraction"] = False
                 key_list = []
             case "DEL":
                 # 删除光标左侧的一个 token
@@ -296,12 +301,54 @@ def decimal_to_fraction(decimal):
         return f"{decimal}/1"
 
 
+def format_number_base(number, base):
+    """根据进制格式化数字，包括整数和小数"""
+
+    def convert_fractional_part(fraction, base):
+        """将小数部分转换为指定进制"""
+        result = []
+        for _ in range(15):  # 限制精度为 15 位
+            fraction *= base
+            digit = int(fraction)
+            result.append(digit)
+            fraction -= digit
+            if fraction == 0:
+                break
+        return "".join(str(d) for d in result)
+
+    if base not in ["Bin", "Oct", "Hex"]:
+        raise ValueError("Base must be 'Bin', 'Oct', or 'Hex'")
+    base_map = {"Bin": 2, "Oct": 8, "Hex": 16}
+    base_value = base_map[base]
+
+    if isinstance(number, str):
+        number = float(number)
+    # 处理整数部分和小数部分
+    integer_part = int(number)
+    fractional_part = number - integer_part
+    # 转换整数部分
+    if base == "Bin":
+        integer_str = bin(integer_part)[2:]
+    elif base == "Oct":
+        integer_str = oct(integer_part)[2:]
+    elif base == "Hex":
+        integer_str = hex(integer_part)[2:].upper()
+    # 转换小数部分
+    if fractional_part > 0:
+        fractional_str = convert_fractional_part(fractional_part, base_value)
+        return f"{integer_str}.{fractional_str}"
+    else:
+        return integer_str
+
+
 def format_result(result, state):
     """格式化结果"""
     if state.get("use_scientific", False):
         str_result = f"{result:.30e}"
     elif state.get("use_fraction", False):
         str_result = decimal_to_fraction(result)
+    elif state.get("number_base", "Dec") != "Dec":
+        str_result = format_number_base(result, state.get("number_base", "Dec"))
     else:
         str_result = f"{result:.15g}"
 

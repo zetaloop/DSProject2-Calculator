@@ -151,6 +151,14 @@ export default function CalculatorDisplay({
             S⇔D
           </Badge>
         )}
+        {state.number_base !== "Dec" && (
+          <Badge
+            variant="secondary"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+          >
+            {state.number_base}
+          </Badge>
+        )}
       </CardContent>
     </Card>
   );
