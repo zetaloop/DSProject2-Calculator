@@ -138,7 +138,7 @@ export default function CalculatorDisplay({
         {state.use_scientific && (
           <Badge
             variant="secondary"
-            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono rounded-lg"
           >
             SCI
           </Badge>
@@ -146,7 +146,7 @@ export default function CalculatorDisplay({
         {state.use_fraction && (
           <Badge
             variant="secondary"
-            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono rounded-lg"
           >
             S⇔D
           </Badge>
@@ -154,7 +154,7 @@ export default function CalculatorDisplay({
         {state.number_base !== "Dec" && (
           <Badge
             variant="secondary"
-            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono rounded-lg"
           >
             {state.number_base}
           </Badge>
