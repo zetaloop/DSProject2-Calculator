@@ -141,8 +141,6 @@ def handle_input(expression, state, key):
         key_list = mapped_key
     else:
         # 重置答案状态
-        if "showing_answer" not in state:
-            state["showing_answer"] = False
         previous_showing_answer = state["showing_answer"]
         state["showing_answer"] = False
         # 处理特殊按键

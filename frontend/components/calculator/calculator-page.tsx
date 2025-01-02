@@ -26,7 +26,7 @@ export default function CalculatorPage() {
   useEffect(() => {
     const initializeDisplay = async () => {
       try {
-        const response = await sendInput("AC", []);
+        const response = await sendInput("AC", [], { showing_answer: false });
         setInternalExpression(response.expression);
         setCurrentResult(processResult(response.result));
         setIsAnswerState(response.state.showing_answer);
@@ -42,7 +42,9 @@ export default function CalculatorPage() {
 
   const handleKeyPress = async (value: string) => {
     try {
-      const response = await sendInput(value, internalExpression);
+      const response = await sendInput(value, internalExpression, {
+        showing_answer: isAnswerState,
+      });
       setInternalExpression(response.expression);
       setCurrentResult(processResult(response.result));
       setIsAnswerState(response.state.showing_answer);
