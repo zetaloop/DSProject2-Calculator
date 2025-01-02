@@ -113,7 +113,10 @@ def evaluate_postfix(tokens, state):
                         raise ValueError("除数不能为零")
                     result = a % b
                 elif token == "^":
-                    result = pow(a, b)
+                    try:
+                        result = pow(a, b)
+                    except OverflowError:
+                        raise ValueError("结果过大")
                 elif token == "nPr":
                     # 检查参数
                     if not (a >= 0 and b >= 0 and a.is_integer() and b.is_integer()):
@@ -257,20 +260,20 @@ def calculate(expression, state):
         str_result = format_result(result, state)
         return str_result, result
     except ValueError as e:
-        return f"Error: {str(e)}", None
+        return f"Error: {str(e)}", 0
     except Exception as e:
         import traceback
 
         print(f"错误: {str(e)}")
         print(traceback.format_exc())
-        return f"Error: {str(e)}", None
+        return f"Error: {str(e)}", 0
 
 
 def format_result(result, state):
     if state.get("use_scientific", False):
-        str_result = f"{result:e}"
+        str_result = f"{result:.30e}"
     else:
-        str_result = f"{result:g}"
+        str_result = f"{result:.15g}"
 
     prefix = "Ans = " if state["showing_answer"] else "Ans (predicted) = "
     return f"{prefix}{str_result}"
