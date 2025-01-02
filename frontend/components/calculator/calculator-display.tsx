@@ -55,12 +55,12 @@ export default function CalculatorDisplay({
             className="inline-block h-[2em] w-[3px] align-middle bg-current animate-blink mx-[1px]"
           />
         );
-      } else if (tk === "Ans" && state.previous_ans !== null) {
+      } else if (tk === "Ans" && state.ans !== null) {
         return (
           <VariableDisplay
             key={`tk-${idx}`}
             name="Ans"
-            value={state.previous_ans.toString()}
+            value={state.ans.toString()}
             isAnswerState={state.showing_answer}
           />
         );

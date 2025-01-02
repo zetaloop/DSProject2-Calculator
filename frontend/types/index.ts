@@ -16,8 +16,8 @@ export interface CalculatorResponse {
 
 export interface CalculatorState {
   showing_answer: boolean;
-  ans: number | null;
-  previous_ans: number | null;
+  _current_ans: number;
+  ans: number;
 }
 
 export interface CalculatorResponse {

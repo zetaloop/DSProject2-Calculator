@@ -68,9 +68,7 @@ def evaluate_postfix(tokens, state):
                 stack.append(random.random())
 
             elif token == "Ans":
-                if state is None or "ans" not in state:
-                    raise ValueError("没有可用的上一次计算结果")
-                stack.append(state["ans"])
+                stack.append(state["_current_ans"])
 
             elif token in ["(+)", "(-)"]:
                 if not stack:
@@ -122,6 +120,9 @@ def handle_input(expression, state, key):
 
     cursor_index = expression.index("|")
 
+    # 处理 Ans 变量
+    state["ans"] = state["_current_ans"]
+
     OP_MAPEX = {
         "": [],
         "MC": ["M"],
@@ -145,8 +146,7 @@ def handle_input(expression, state, key):
     if mapped_key is not None:
         key_list = mapped_key
     else:
-        # 重置答案状态
-        previous_showing_answer = state["showing_answer"]
+        # 答案状态
         state["showing_answer"] = False
         # 处理特殊按键
         match key:
@@ -174,8 +174,6 @@ def handle_input(expression, state, key):
                         expression[cursor_index],
                     )
                     cursor_index -= 1
-                # 不改变答案状态
-                state["showing_answer"] = previous_showing_answer
                 key_list = []
             case "→":
                 # 光标右移
@@ -185,8 +183,6 @@ def handle_input(expression, state, key):
                         expression[cursor_index],
                     )
                     cursor_index += 1
-                # 不改变答案状态
-                state["showing_answer"] = previous_showing_answer
                 key_list = []
             case "Exit":
                 import sys
@@ -217,8 +213,9 @@ def calculate(expression, state):
         result = evaluate_postfix(postfix, state)
 
         # 格式化输出
-        str_result = f"{result:.10g}"
-        return f"Ans = {str_result}", result
+        str_result = f"{result:g}"
+        prefix = "Ans = " if state["showing_answer"] else "Ans (predicted) = "
+        return f"{prefix}{str_result}", result
     except ValueError as e:
         return f"Error: {str(e)}", None
     except Exception as e:

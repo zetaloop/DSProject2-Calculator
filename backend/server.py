@@ -22,9 +22,10 @@ def create_app(static_folder):
         expression: list[str] = core.handle_input(expression, state, key)
         result, ans = core.calculate(expression, state)
 
+        # state ans：当前运算中使用的 Ans 变量值
+        # state _current_ans：最新完成（=）的运算结果
         if key == "=":
-            state["previous_ans"] = state["ans"]
-            state["ans"] = ans
+            state["_current_ans"] = ans
 
         return jsonify({"expression": expression, "state": state, "result": result})
 
