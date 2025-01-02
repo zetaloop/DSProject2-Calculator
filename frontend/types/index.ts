@@ -23,6 +23,7 @@ export interface CalculatorState {
   use_fraction: boolean;
   memory: number;
   number_base: "Dec" | "Bin" | "Oct" | "Hex";
+  angle_mode: "Deg" | "Rad" | "Hyp";
 }
 
 export interface CalculatorResponse {

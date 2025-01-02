@@ -14,6 +14,17 @@ def evaluate_postfix(tokens, state):
     """计算后缀表达式的值"""
     stack = []
 
+    # 获取角度模式
+    angle_mode = state.get("angle_mode", "Deg")
+
+    # 角度转弧度函数
+    def to_radians(x):
+        return x * math.pi / 180 if angle_mode == "Deg" else x
+
+    # 弧度转角度函数
+    def to_degrees(x):
+        return x * 180 / math.pi if angle_mode == "Deg" else x
+
     for token in tokens:
         if (
             token not in precedence
@@ -47,17 +58,35 @@ def evaluate_postfix(tokens, state):
                 elif token == "abs":
                     result = abs(x)
                 elif token == "sin":
-                    result = math.sin(x)
+                    if angle_mode == "Hyp":
+                        result = math.sinh(x)
+                    else:
+                        result = math.sin(to_radians(x))
                 elif token == "cos":
-                    result = math.cos(x)
+                    if angle_mode == "Hyp":
+                        result = math.cosh(x)
+                    else:
+                        result = math.cos(to_radians(x))
                 elif token == "tan":
-                    result = math.tan(x)
+                    if angle_mode == "Hyp":
+                        result = math.tanh(x)
+                    else:
+                        result = math.tan(to_radians(x))
                 elif token == "arcsin":
-                    result = math.asin(x)
+                    if angle_mode == "Hyp":
+                        result = math.asinh(x)
+                    else:
+                        result = to_degrees(math.asin(x))
                 elif token == "arccos":
-                    result = math.acos(x)
+                    if angle_mode == "Hyp":
+                        result = math.acosh(x)
+                    else:
+                        result = to_degrees(math.acos(x))
                 elif token == "arctan":
-                    result = math.atan(x)
+                    if angle_mode == "Hyp":
+                        result = math.atanh(x)
+                    else:
+                        result = to_degrees(math.atan(x))
                 elif token == "int":
                     result = int(x)
                 elif token == "sqrt":
@@ -210,6 +239,10 @@ def handle_input(expression, state, key):
                 state["number_base"] = key
                 state["use_scientific"] = False
                 state["use_fraction"] = False
+                key_list = []
+            case "Deg" | "Rad" | "Hyp":
+                # 切换角度模式
+                state["angle_mode"] = key
                 key_list = []
             case "DEL":
                 # 删除光标左侧的一个 token

@@ -14,6 +14,7 @@ const initialState: CalculatorState = {
   use_fraction: false,
   memory: 0,
   number_base: "Dec",
+  angle_mode: "Deg",
 };
 
 export default function CalculatorPage() {
