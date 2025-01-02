@@ -15,7 +15,7 @@ export function VariableDisplay({
         {name}
       </span>
       <span
-        className={`mt-0.5 ${
+        className={`mt-0.5 min-w-[2em] text-center ${
           isAnswerState ? "text-muted-foreground" : "text-foreground"
         }`}
       >
