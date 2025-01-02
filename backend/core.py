@@ -59,6 +59,20 @@ def evaluate_postfix(tokens, state):
                     result = math.atan(x)
                 elif token == "int":
                     result = int(x)
+                elif token == "sqrt":
+                    if x < 0:
+                        raise ValueError("平方根的参数不能为负数")
+                    result = math.sqrt(x)
+                elif token == "cbrt":
+                    result = math.copysign(abs(x) ** (1 / 3), x)  # 支持负数的立方根
+                elif token == "log":
+                    if x <= 0:
+                        raise ValueError("对数的参数必须为正数")
+                    result = math.log10(x)
+                elif token == "ln":
+                    if x <= 0:
+                        raise ValueError("对数的参数必须为正数")
+                    result = math.log(x)
                 else:
                     raise ValueError(f"未知运算: {token}")
 
