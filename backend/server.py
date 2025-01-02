@@ -3,6 +3,7 @@ import os
 import sys
 import core
 
+
 def create_app(static_folder):
     app = Flask(__name__, static_folder=static_folder, static_url_path="/")
 
@@ -13,18 +14,14 @@ def create_app(static_folder):
         if not data or "key" not in data or "expression" not in data:
             return jsonify({"error": "无效的输入"}), 400
 
-        key = data["key"]
-        expression = data["expression"]
+        key: str = data["key"]
+        expression: list[str] = data["expression"]
 
-        expression = core.handle_input(expression, key)
-        display = core.display(expression)
-        result = core.calculate(expression)
+        expression: list[str] = core.handle_input(expression, key)
+        display: str = core.display(expression)
+        result: str = core.calculate(expression)
 
-        return jsonify({
-            "expression": expression,
-            "display": display,
-            "result": result
-        })
+        return jsonify({"expression": expression, "display": display, "result": result})
 
     # 默认路由，返回前端的入口页面
     @app.route("/", defaults={"path": ""})
