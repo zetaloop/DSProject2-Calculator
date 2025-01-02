@@ -81,7 +81,7 @@ export default function CalculatorKeypad({
     // Row 2
     { label: "M+", value: "M+", variant: "ghost" },
     { label: "M-", value: "M-", variant: "ghost" },
-    { label: "MR", value: "MR", variant: "ghost" },
+    { label: "MR", value: "MR", shortcut: "m", variant: "ghost" },
     { label: "MC", value: "MC", variant: "ghost" },
     { label: "S⇔D", value: "S⇔D", variant: "ghost" },
     { label: "SCI", value: "SCI", variant: "ghost" },

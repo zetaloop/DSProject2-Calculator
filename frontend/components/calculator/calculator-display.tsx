@@ -74,6 +74,15 @@ export default function CalculatorDisplay({
             isAnswerState={state.showing_answer}
           />
         );
+      } else if (tk === "M") {
+        return (
+          <VariableDisplay
+            key={`tk-${idx}`}
+            name="M"
+            value={state.memory.toString()}
+            isAnswerState={state.showing_answer}
+          />
+        );
       } else if (tk === "nPr") {
         return (
           <span key={`tk-${idx}`} className="font-black">

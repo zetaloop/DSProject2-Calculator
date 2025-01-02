@@ -18,7 +18,7 @@ def evaluate_postfix(tokens, state):
         if (
             token not in precedence
             and token not in function_names
-            and token not in ["Random", "Ans"]
+            and token not in ["Random", "Ans", "M"]
         ):
             # 数字或变量
             try:
@@ -84,6 +84,9 @@ def evaluate_postfix(tokens, state):
 
             elif token == "Ans":
                 stack.append(state["_current_ans"])
+
+            elif token == "M":
+                stack.append(state.get("memory", 0))
 
             elif token in ["(+)", "(-)"]:
                 if not stack:
@@ -163,7 +166,7 @@ def handle_input(expression, state, key):
 
     OP_MAPEX = {
         "": [],
-        "MC": ["M"],
+        "MR": ["M"],
         "x^2": ["^", "2"],
         "x^3": ["^", "3"],
         "x^y": ["^"],
@@ -188,7 +191,7 @@ def handle_input(expression, state, key):
         state["showing_answer"] = False
         # 处理特殊按键
         match key:
-            case "=":
+            case "=" | "M+" | "M-" | "MC":
                 state["showing_answer"] = True
                 key_list = []
             case "SCI":
@@ -215,7 +218,11 @@ def handle_input(expression, state, key):
             case "AC":
                 # 全部清空
                 expression = ["|"]
-                return expression
+                key_list = []
+            case "MC":
+                # 清除内存
+                state["memory"] = 0
+                key_list = []
             case "←":
                 # 光标左移
                 if cursor_index > 0:

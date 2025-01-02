@@ -12,6 +12,7 @@ const initialState: CalculatorState = {
   _predicted_ans: 0,
   use_scientific: false,
   use_fraction: false,
+  memory: 0,
 };
 
 export default function CalculatorPage() {

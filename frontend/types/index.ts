@@ -21,6 +21,7 @@ export interface CalculatorState {
   _predicted_ans: number;
   use_scientific: boolean;
   use_fraction: boolean;
+  memory: number;
 }
 
 export interface CalculatorResponse {

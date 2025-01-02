@@ -24,14 +24,18 @@ def create_app(static_folder):
         # state ans：当前运算中使用的 Ans 变量值
         # state _current_ans：最新完成（=）的运算结果
         # state _previous_ans：最新预测的运算结果
-        if key in ["SCI"]:
+        if key in ["SCI", "S⇔D"]:
             # 仅格式化
             result = core.format_result(state["_predicted_ans"], state)
         else:
             # 正常计算
             result, ans = core.calculate(expression, state)
-            if key == "=":
+            if key in ["=", "M+", "M-", "MC"]:
                 state["_current_ans"] = ans
+            if key == "M+":
+                state["memory"] += ans
+            if key == "M-":
+                state["memory"] -= ans
 
         return jsonify({"expression": expression, "state": state, "result": result})
 
