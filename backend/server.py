@@ -20,8 +20,7 @@ def create_app(static_folder):
         state: dict[str, Any] = data["state"]
 
         expression: list[str] = core.handle_input(expression, key)
-        display: str = core.display(expression)
-        result: str = core.calculate(expression)
+        display, result = core.calculate(expression, state)
 
         return jsonify({"expression": expression, "display": display, "result": result})
 

@@ -145,30 +145,32 @@ def handle_input(expression, key):
     return expression + key
 
 
-def display(expression):
-    """显示当前表达式"""
-    try:
-        processed = preprocess_tokens(expression)
-        return " ".join(processed)
-    except ValueError as e:
-        return str(e)
+def calculate(expression, state):
+    """计算表达式的值，同时返回显示内容和计算结果
 
+    Args:
+        expression: 输入的表达式
+        state: 计算器状态
 
-def calculate(expression):
-    """计算表达式的值"""
+    Returns:
+        tuple: (display, result) 其中display是表达式的显示形式，result是计算结果
+    """
+    processed = preprocess_tokens(expression)
+    display_str = " ".join(processed)
     try:
-        processed = preprocess_tokens(expression)
+
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix)
 
         # 格式化输出
         if isinstance(result, complex):
-            return f"Ans = {result.real:.10g} + {result.imag:.10g}i"
+            result_str = f"Ans = {result.real:.10g} + {result.imag:.10g}i"
         else:
             # 去除不必要的小数点和零
             str_result = f"{result:.10g}"
-            return f"Ans = {str_result}"
+            result_str = f"Ans = {str_result}"
     except ValueError as e:
-        return f"Error: {str(e)}"
+        result_str = f"Error: {str(e)}"
     except Exception as e:
-        return f"Error: {str(e)}"
+        result_str = f"Error: {str(e)}"
+    return display_str, result_str
