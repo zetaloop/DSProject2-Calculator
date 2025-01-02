@@ -2,6 +2,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VariableDisplay } from "./variable-display";
 import { CalculatorState } from "@/types";
+import { useEffect, useRef } from "react";
 
 interface CalculatorDisplayProps {
   currentValue: string[];
@@ -18,6 +19,30 @@ export default function CalculatorDisplay({
   isError = false,
   state,
 }: CalculatorDisplayProps) {
+  const expressionRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
+
+  // 自动滚动到光标位置
+  useEffect(() => {
+    if (cursorRef.current && expressionRef.current) {
+      const cursor = cursorRef.current;
+      const container = expressionRef.current;
+      const cursorRect = cursor.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      // 如果光标不在可视区域内，滚动到光标位置
+      if (cursorRect.right > containerRect.right) {
+        // 光标在右边界外
+        container.scrollLeft =
+          container.scrollLeft + (cursorRect.right - containerRect.right) + 20;
+      } else if (cursorRect.left < containerRect.left) {
+        // 光标在左边界外
+        container.scrollLeft =
+          container.scrollLeft - (containerRect.left - cursorRect.left) - 20;
+      }
+    }
+  }, [currentValue]); // 当表达式改变时重新计算滚动位置
+
   // 将 tokens 映射到真正的 JSX
   const renderTokens = () => {
     return currentValue.map((tk, idx) => {
