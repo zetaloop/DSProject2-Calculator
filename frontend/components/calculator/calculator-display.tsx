@@ -65,6 +65,15 @@ export default function CalculatorDisplay({
             isAnswerState={state.showing_answer}
           />
         );
+      } else if (tk === "Random") {
+        return (
+          <VariableDisplay
+            key={`tk-${idx}`}
+            name="Random"
+            value="?"
+            isAnswerState={state.showing_answer}
+          />
+        );
       } else if (tk === "nPr") {
         return (
           <span key={`tk-${idx}`} className="font-black">
