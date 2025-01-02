@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,6 +27,7 @@ type ButtonVariant =
 interface ButtonConfig {
   label: string | JSX.Element;
   value: string;
+  shortcut?: string;
   variant: ButtonVariant;
   className?: string;
   dropdownOptions?: string[];
@@ -40,6 +41,7 @@ export default function CalculatorKeypad({
   onNumberBaseChange,
   onKeyPress,
 }: CalculatorKeypadProps) {
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const angleModes = ["Deg", "Rad", "Hyp"];
   const numberBases = ["Dec", "Bin", "Oct", "Hex"];
 
@@ -59,11 +61,12 @@ export default function CalculatorKeypad({
       dropdownOptions: numberBases,
       onSelect: onNumberBaseChange,
     },
-    { label: "←", value: "←", variant: "link" },
-    { label: "→", value: "→", variant: "link" },
+    { label: "←", value: "←", shortcut: "ArrowLeft", variant: "link" },
+    { label: "→", value: "→", shortcut: "ArrowRight", variant: "link" },
     {
       label: "AC",
       value: "AC",
+      shortcut: "Escape",
       variant: "link",
       className: "text-destructive",
     },
@@ -108,6 +111,7 @@ export default function CalculatorKeypad({
         </span>
       ),
       value: "x^y",
+      shortcut: "^",
       variant: "ghost",
     },
     {
@@ -141,10 +145,10 @@ export default function CalculatorKeypad({
       value: "e^x",
       variant: "ghost",
     },
-    { label: "x!", value: "x!", variant: "ghost" },
+    { label: "x!", value: "x!", shortcut: "!", variant: "ghost" },
     { label: "log", value: "log", variant: "ghost" },
     { label: "ln", value: "ln", variant: "ghost" },
-    { label: "|x|", value: "|x|", variant: "ghost" },
+    { label: "|x|", value: "|x|", shortcut: "|", variant: "ghost" },
 
     // Row 5
     { label: "sin", value: "sin", variant: "ghost" },
@@ -179,45 +183,46 @@ export default function CalculatorKeypad({
     },
 
     // Row 6
-    { label: "(", value: "(", variant: "ghost" },
-    { label: ")", value: ")", variant: "ghost" },
+    { label: "(", value: "(", shortcut: "(", variant: "ghost" },
+    { label: ")", value: ")", shortcut: ")", variant: "ghost" },
     { label: "π", value: "π", variant: "ghost" },
-    { label: "e", value: "e", variant: "ghost" },
-    { label: "i", value: "i", variant: "ghost" },
-    { label: "%", value: "%", variant: "ghost" },
+    { label: "e", value: "e", shortcut: "e", variant: "ghost" },
+    { label: "i", value: "i", shortcut: "i", variant: "ghost" },
+    { label: "%", value: "%", shortcut: "%", variant: "ghost" },
 
     // Row 7
-    { label: "7", value: "7", variant: "outline" },
-    { label: "8", value: "8", variant: "outline" },
-    { label: "9", value: "9", variant: "outline" },
-    { label: "÷", value: "/", variant: "outline" },
+    { label: "7", value: "7", shortcut: "7", variant: "outline" },
+    { label: "8", value: "8", shortcut: "8", variant: "outline" },
+    { label: "9", value: "9", shortcut: "9", variant: "outline" },
+    { label: "÷", value: "/", shortcut: "/", variant: "outline" },
     { label: "nPr", value: "nPr", variant: "ghost" },
     { label: "nCr", value: "nCr", variant: "ghost" },
 
     // Row 8
-    { label: "4", value: "4", variant: "outline" },
-    { label: "5", value: "5", variant: "outline" },
-    { label: "6", value: "6", variant: "outline" },
-    { label: "×", value: "*", variant: "outline" },
+    { label: "4", value: "4", shortcut: "4", variant: "outline" },
+    { label: "5", value: "5", shortcut: "5", variant: "outline" },
+    { label: "6", value: "6", shortcut: "6", variant: "outline" },
+    { label: "×", value: "*", shortcut: "*", variant: "outline" },
     { label: "Mod", value: "Mod", variant: "ghost" },
     { label: "Ran#", value: "Ran#", variant: "ghost" },
 
     // Row 9
-    { label: "1", value: "1", variant: "outline" },
-    { label: "2", value: "2", variant: "outline" },
-    { label: "3", value: "3", variant: "outline" },
-    { label: "-", value: "-", variant: "outline" },
+    { label: "1", value: "1", shortcut: "1", variant: "outline" },
+    { label: "2", value: "2", shortcut: "2", variant: "outline" },
+    { label: "3", value: "3", shortcut: "3", variant: "outline" },
+    { label: "-", value: "-", shortcut: "-", variant: "outline" },
     { label: "Ans", value: "Ans", variant: "ghost" },
     {
       label: "DEL",
       value: "DEL",
+      shortcut: "Backspace",
       variant: "ghost",
       className: "text-destructive",
     },
 
     // Row 10
-    { label: "0", value: "0", variant: "outline" },
-    { label: ".", value: ".", variant: "outline" },
+    { label: "0", value: "0", shortcut: "0", variant: "outline" },
+    { label: ".", value: ".", shortcut: ".", variant: "outline" },
     {
       label: (
         <span>
@@ -227,9 +232,31 @@ export default function CalculatorKeypad({
       value: "*10^n",
       variant: "outline",
     },
-    { label: "+", value: "+", variant: "outline" },
-    { label: "=", value: "=", variant: "outline", className: "col-span-2" },
+    { label: "+", value: "+", shortcut: "+", variant: "outline" },
+    {
+      label: "=",
+      value: "=",
+      shortcut: "Enter",
+      variant: "outline",
+      className: "col-span-2",
+    },
   ];
+
+  // 监听键盘事件
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // 如果 buttonRefs.current[e.key] 存在，就点击该按钮
+      const btn = buttonRefs.current[e.key];
+      if (btn) {
+        btn.click();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const renderButton = (button: ButtonConfig, index: number) => {
     if (button.dropdownOptions) {
@@ -238,6 +265,11 @@ export default function CalculatorKeypad({
           <DropdownMenuTrigger asChild>
             <Button
               variant={button.variant}
+              ref={(el) => {
+                if (button.shortcut) {
+                  buttonRefs.current[button.shortcut] = el;
+                }
+              }}
               className={`font-semibold text-xs sm:text-sm h-full w-full ${
                 button.className || ""
               }`}
@@ -271,6 +303,11 @@ export default function CalculatorKeypad({
     return (
       <Button
         key={index}
+        ref={(el) => {
+          if (button.shortcut) {
+            buttonRefs.current[button.shortcut] = el;
+          }
+        }}
         variant={button.variant}
         className={`font-semibold text-xs sm:text-sm h-full w-full ${
           button.className || ""
