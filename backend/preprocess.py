@@ -2,7 +2,6 @@ from typing import Literal
 
 precedence = {
     "!": 2,
-    "i": 2,
     "%": 2,
     "^": 3,
     "(+)": 4,

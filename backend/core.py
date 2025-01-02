@@ -217,11 +217,8 @@ def calculate(expression, state):
         result = evaluate_postfix(postfix, state)
 
         # 格式化输出
-        if isinstance(result, complex):
-            return f"Ans = {result.real:.10g} + {result.imag:.10g}i", result
-        else:
-            str_result = f"{result:.10g}"
-            return f"Ans = {str_result}", result
+        str_result = f"{result:.10g}"
+        return f"Ans = {str_result}", result
     except ValueError as e:
         return f"Error: {str(e)}", None
     except Exception as e:
