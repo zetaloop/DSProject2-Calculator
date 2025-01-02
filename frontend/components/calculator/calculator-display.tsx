@@ -14,6 +14,27 @@ export default function CalculatorDisplay({
   isLoading = false,
   isError = false,
 }: CalculatorDisplayProps) {
+  // 将后端的 currentValue 拆分为 tokens
+  const tokens = currentValue.split(" ");
+
+  // 将 tokens 映射到真正的 JSX
+  const renderTokens = () => {
+    return tokens.map((tk, idx) => {
+      if (tk === "|") {
+        // 这里使用一个带有闪烁动画的光标
+        return (
+          <span
+            key={`cursor-${idx}`}
+            className="inline-block w-[1px] bg-current animate-blink mx-[1px]"
+            style={{ height: "1em", verticalAlign: "middle" }}
+          />
+        );
+      } else {
+        return <span key={`tk-${idx}`}>{tk}</span>;
+      }
+    });
+  };
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -24,7 +45,7 @@ export default function CalculatorDisplay({
           {isLoading ? (
             <Skeleton className="h-full w-24 ml-auto" />
           ) : (
-            currentValue
+            renderTokens()
           )}
         </div>
       </CardHeader>

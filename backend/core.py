@@ -109,6 +109,15 @@ def evaluate_postfix(tokens):
 
 
 def handle_input(expression, key):
+    """处理输入按键，维护 expression 数组，并将 '|' 视为光标位置。"""
+
+    # 如果 expression 里没有光标，则默认加在末尾
+    if "|" not in expression:
+        expression.append("|")
+
+    cursor_index = expression.index("|")
+
+    # 先做一些映射（与原先一样），比如 "x^2" -> ["^", "2"] 等
     OP_MAPEX = {
         "": [],
         "MC": ["M"],
@@ -127,29 +136,46 @@ def handle_input(expression, key):
         "Ran#": ["Random"],
         "*10^n": ["*", "10", "^"],
     }
-    if key in OP_MAPEX:
-        key = OP_MAPEX[key]
+
+    # key 可能被映射为列表
+    mapped_key = OP_MAPEX.get(key, None)
+
+    if mapped_key is not None:
+        key_list = mapped_key
     else:
+        # 处理特殊按键
         match key:
             case "DEL":
-                if expression:
-                    expression.pop()
-                key = []
+                # 删除光标左侧的一个 token
+                if cursor_index > 0:
+                    expression.pop(cursor_index - 1)
+                    cursor_index -= 1
+                # 若左侧没有 token 了，就删除右侧
+                elif cursor_index < len(expression) - 1:
+                    expression.pop(cursor_index + 1)
+                key_list = []
             case "AC":
-                expression = []
-                key = ["0"]
+                # 全部清空，并给一个初始“0”
+                expression = ["|", "0"]
+                return expression
             case "←":
-                if len(expression) > 1:
-                    # 将最后一个元素移到开头
-                    last = expression.pop()
-                    expression.insert(0, last)
-                key = []
+                # 光标左移
+                if cursor_index > 0:
+                    expression[cursor_index], expression[cursor_index - 1] = (
+                        expression[cursor_index - 1],
+                        expression[cursor_index],
+                    )
+                    cursor_index -= 1
+                key_list = []
             case "→":
-                if len(expression) > 1:
-                    # 将第一个元素移到末尾
-                    first = expression.pop(0)
-                    expression.append(first)
-                key = []
+                # 光标右移
+                if cursor_index < len(expression) - 1:
+                    expression[cursor_index], expression[cursor_index + 1] = (
+                        expression[cursor_index + 1],
+                        expression[cursor_index],
+                    )
+                    cursor_index += 1
+                key_list = []
             case "Exit":
                 import sys
                 import webview
@@ -158,15 +184,19 @@ def handle_input(expression, key):
                     window.destroy()
                 sys.exit(0)
             case _:
-                key = [key]
+                key_list = [key]
 
-    assert isinstance(key, list)
-    return expression + key
+    # 将新的 key_list 插入到光标位置之前
+    for k in key_list:
+        expression.insert(cursor_index, k)
+        cursor_index += 1
+
+    return expression
 
 
 def calculate(expression, state):
     """计算表达式的值"""
-    processed = preprocess_tokens(expression, mode="full")
+    processed = preprocess_tokens(expression)
     try:
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix)
@@ -175,7 +205,6 @@ def calculate(expression, state):
         if isinstance(result, complex):
             result_str = f"Ans = {result.real:.10g} + {result.imag:.10g}i"
         else:
-            # 去除不必要的小数点和零
             str_result = f"{result:.10g}"
             return f"Ans = {str_result}"
     except ValueError as e:
@@ -189,6 +218,21 @@ def calculate(expression, state):
 
 
 def display(expression, state):
-    """生成表达式的显示形式"""
-    processed = preprocess_tokens(expression, mode="display")
-    return " ".join(processed)
+    """生成表达式的显示形式（包含 '|' 光标）"""
+    return " ".join(expression)
+
+    # 然后再把光标插回原位置
+    display_tokens = []
+    idx = 0
+    for t in expression:
+        if t == "|":
+            display_tokens.append("|")  # 暂时先用 '|'，前端去换成光标
+        else:
+            # 这里要与 processed_for_display 对应地往下取一个
+            if idx < len(processed_for_display):
+                display_tokens.append(processed_for_display[idx])
+                idx += 1
+
+    # 如果 processed_for_display 比 expression 少一些括号补全，也没关系，原则上不影响展示
+    # 最后用空格拼接返回
+    return " ".join(display_tokens)

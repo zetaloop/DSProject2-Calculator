@@ -32,13 +32,17 @@ function_names = {
 suffix_ops = {"!", "i", "%"}
 
 
-def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
+def preprocess_tokens(tokens):
     """
     预处理：
+      0) 去掉光标
       1) 自动合并相邻数字，形成单一数字 token。
-      2) 修正不平衡的括号。（仅完整模式）
-      3) 在相邻需要隐式乘法的地方插入 '*'（仅完整模式）
+      2) 修正不平衡的括号。
+      3) 在相邻需要隐式乘法的地方插入 '*'
     """
+    # 0) 去掉光标
+    tokens = [t for t in tokens if t != "|"]
+
     # 1) 自动合并相邻数字
     merged = []
     number_buffer = []
@@ -52,10 +56,6 @@ def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
             merged.append(tk)
     if number_buffer:
         merged.append("".join(number_buffer))
-
-    if mode != "full":
-        return merged
-
     merged = [".0" if t == "." else t for t in merged]
 
     # 2) 修正括号
@@ -122,7 +122,7 @@ def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
 def tokens_to_postfix(tokens):
     """
     将修正和插入隐式乘法后的 token 转换为后缀表达式。
-    注意处理一元 +/- 与后缀运算符。
+    注意一元 +/- 与后缀运算符。
     """
     associativity = {
         "!": "left",
