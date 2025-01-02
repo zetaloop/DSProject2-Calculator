@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { VariableDisplay } from "./variable-display";
 import { CalculatorState } from "@/types";
 import { useEffect, useRef } from "react";
@@ -99,7 +100,7 @@ export default function CalculatorDisplay({
           )}
         </div>
       </CardHeader>
-      <CardContent className="pt-0 pb-4">
+      <CardContent className="pt-0 pb-4 relative">
         <div
           className={`text-right leading-5 font-mono min-h-[1.5rem] overflow-x-auto overflow-y-visible whitespace-nowrap custom-scrollbar transition-all ${
             isError
@@ -116,6 +117,14 @@ export default function CalculatorDisplay({
             previousValue
           )}
         </div>
+        {state.use_scientific && (
+          <Badge
+            variant="secondary"
+            className="absolute bottom-1 left-1 text-[0.7rem] font-mono"
+          >
+            SCI
+          </Badge>
+        )}
       </CardContent>
     </Card>
   );
