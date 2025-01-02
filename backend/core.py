@@ -151,7 +151,7 @@ def handle_input(expression, key):
 
 def calculate(expression, state):
     """计算表达式的值"""
-    processed = preprocess_tokens(expression, hidden_tokens=True)
+    processed = preprocess_tokens(expression, mode="full")
     try:
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix)
@@ -175,5 +175,5 @@ def calculate(expression, state):
 
 def display(expression, state):
     """生成表达式的显示形式"""
-    processed = preprocess_tokens(expression, hidden_tokens=False)
+    processed = preprocess_tokens(expression, mode="display")
     return " ".join(processed)

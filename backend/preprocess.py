@@ -1,3 +1,5 @@
+from typing import Literal
+
 precedence = {
     "!": 2,
     "i": 2,
@@ -30,12 +32,12 @@ function_names = {
 suffix_ops = {"!", "i", "%"}
 
 
-def preprocess_tokens(tokens):
+def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
     """
     预处理：
       1) 自动合并相邻数字，形成单一数字 token。
-      2) 修正不平衡的括号。
-      3) 在相邻需要隐式乘法的地方插入 '*'
+      2) 修正不平衡的括号。（仅完整模式）
+      3) 在相邻需要隐式乘法的地方插入 '*'（仅完整模式）
     """
     # 1) 自动合并相邻数字
     merged = []
@@ -50,6 +52,9 @@ def preprocess_tokens(tokens):
             merged.append(tk)
     if number_buffer:
         merged.append("".join(number_buffer))
+
+    if mode != "full":
+        return merged
 
     # 2) 修正括号
     corrected = []
