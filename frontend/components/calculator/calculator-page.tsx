@@ -26,7 +26,7 @@ export default function CalculatorPage() {
   useEffect(() => {
     const initializeDisplay = async () => {
       try {
-        const response = await sendInput("", []); // 直接使用初始值
+        const response = await sendInput("AC", []);
         setInternalExpression(response.expression);
         setCurrentExpression(response.display);
         setCurrentResult(processResult(response.result));

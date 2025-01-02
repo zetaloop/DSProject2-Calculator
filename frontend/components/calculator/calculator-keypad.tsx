@@ -45,8 +45,6 @@ export default function CalculatorKeypad({
 
   const buttonConfig: ButtonConfig[] = [
     // Row 1
-    { label: "History", value: "History", variant: "link" },
-    { label: "Settings", value: "Settings", variant: "link" },
     {
       label: angleMode,
       value: angleMode,
@@ -61,6 +59,8 @@ export default function CalculatorKeypad({
       dropdownOptions: numberBases,
       onSelect: onNumberBaseChange,
     },
+    { label: "←", value: "←", variant: "link" },
+    { label: "→", value: "→", variant: "link" },
     {
       label: "AC",
       value: "AC",

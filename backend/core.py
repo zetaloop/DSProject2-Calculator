@@ -59,6 +59,8 @@ def evaluate_postfix(tokens):
                     result = math.acos(x)
                 elif token == "arctan":
                     result = math.atan(x)
+                else:
+                    raise ValueError(f"未知运算: {token}")
 
                 stack.append(result)
 
@@ -108,6 +110,7 @@ def evaluate_postfix(tokens):
 
 def handle_input(expression, key):
     OP_MAPEX = {
+        "": [],
         "MC": ["M"],
         "x^2": ["^", "2"],
         "x^3": ["^", "3"],
@@ -124,9 +127,6 @@ def handle_input(expression, key):
         "Ran#": ["Random"],
         "*10^n": ["*", "10", "^"],
     }
-    if not key:  # 仅当初始化时前端会给出空键
-        expression = []
-        key = "0"
     if key in OP_MAPEX:
         key = OP_MAPEX[key]
     else:
@@ -134,6 +134,21 @@ def handle_input(expression, key):
             case "DEL":
                 if expression:
                     expression.pop()
+                key = []
+            case "AC":
+                expression = []
+                key = ["0"]
+            case "←":
+                if len(expression) > 1:
+                    # 将最后一个元素移到开头
+                    last = expression.pop()
+                    expression.insert(0, last)
+                key = []
+            case "→":
+                if len(expression) > 1:
+                    # 将第一个元素移到末尾
+                    first = expression.pop(0)
+                    expression.append(first)
                 key = []
             case "Exit":
                 import sys
@@ -175,5 +190,5 @@ def calculate(expression, state):
 
 def display(expression, state):
     """生成表达式的显示形式"""
-    processed = preprocess_tokens(expression, mode="display")
+    processed = preprocess_tokens(expression, mode="full")
     return " ".join(processed)

@@ -56,6 +56,8 @@ def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
     if mode != "full":
         return merged
 
+    merged = [".0" if t == "." else t for t in merged]
+
     # 2) 修正括号
     corrected = []
     unpaired_left = 0
