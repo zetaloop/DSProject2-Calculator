@@ -64,6 +64,18 @@ export default function CalculatorDisplay({
             isAnswerState={state.showing_answer}
           />
         );
+      } else if (tk === "nPr") {
+        return (
+          <span key={`tk-${idx}`} className="font-black">
+            P
+          </span>
+        );
+      } else if (tk === "nCr") {
+        return (
+          <span key={`tk-${idx}`} className="font-black">
+            C
+          </span>
+        );
       } else {
         return <span key={`tk-${idx}`}>{tk}</span>;
       }
