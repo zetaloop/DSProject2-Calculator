@@ -1,13 +1,24 @@
-from preprocess import preprocess_tokens, tokens_to_postfix, precedence, function_names, suffix_ops
+from preprocess import (
+    preprocess_tokens,
+    tokens_to_postfix,
+    precedence,
+    function_names,
+    suffix_ops,
+)
 import math
 import random
+
 
 def evaluate_postfix(tokens):
     """计算后缀表达式的值"""
     stack = []
-    
+
     for token in tokens:
-        if token not in precedence and token not in function_names and token not in ["Random"]:
+        if (
+            token not in precedence
+            and token not in function_names
+            and token not in ["Random"]
+        ):
             # 数字或变量
             try:
                 if token == "π":
@@ -25,7 +36,7 @@ def evaluate_postfix(tokens):
                 if not stack:
                     raise ValueError("表达式错误：缺少操作数")
                 x = stack.pop()
-                
+
                 if token == "!":
                     if x < 0 or not x.is_integer():
                         raise ValueError("阶乘只能用于非负整数")
@@ -48,12 +59,12 @@ def evaluate_postfix(tokens):
                     result = math.acos(x)
                 elif token == "arctan":
                     result = math.atan(x)
-                
+
                 stack.append(result)
-            
+
             elif token == "Random":
                 stack.append(random.random())
-            
+
             elif token in ["(+)", "(-)"]:
                 if not stack:
                     raise ValueError("表达式错误：缺少操作数")
@@ -61,13 +72,13 @@ def evaluate_postfix(tokens):
                 if token == "(-)":
                     x = -x
                 stack.append(x)
-            
+
             else:  # 二元运算符
                 if len(stack) < 2:
                     raise ValueError("表达式错误：缺少操作数")
                 b = stack.pop()
                 a = stack.pop()
-                
+
                 if token == "+":
                     result = a + b
                 elif token == "-":
@@ -84,15 +95,16 @@ def evaluate_postfix(tokens):
                     result = a % b
                 elif token == "^":
                     result = pow(a, b)
-                
+
                 stack.append(result)
-    
+
     if not stack:
         raise ValueError("表达式为空")
     if len(stack) > 1:
         raise ValueError("表达式错误：操作符不足")
-    
+
     return stack[0]
+
 
 def handle_input(expression, key):
     OP_MAPEX = {
@@ -122,6 +134,7 @@ def handle_input(expression, key):
     assert isinstance(key, list)
     return expression + key
 
+
 def display(expression):
     """显示当前表达式"""
     try:
@@ -130,13 +143,14 @@ def display(expression):
     except ValueError as e:
         return str(e)
 
+
 def calculate(expression):
     """计算表达式的值"""
     try:
         processed = preprocess_tokens(expression)
         postfix = tokens_to_postfix(processed)
         result = evaluate_postfix(postfix)
-        
+
         # 格式化输出
         if isinstance(result, complex):
             return f"Ans = {result.real:.10g} + {result.imag:.10g}i"

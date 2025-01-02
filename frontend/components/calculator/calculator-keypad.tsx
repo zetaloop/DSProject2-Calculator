@@ -61,8 +61,18 @@ export default function CalculatorKeypad({
       dropdownOptions: numberBases,
       onSelect: onNumberBaseChange,
     },
-    { label: "AC", value: "AC", variant: "link", className: "text-destructive" },
-    { label: "Exit", value: "Exit", variant: "link", className: "text-destructive" },
+    {
+      label: "AC",
+      value: "AC",
+      variant: "link",
+      className: "text-destructive",
+    },
+    {
+      label: "Exit",
+      value: "Exit",
+      variant: "link",
+      className: "text-destructive",
+    },
 
     // Row 2
     { label: "M+", value: "M+", variant: "ghost" },
@@ -198,7 +208,12 @@ export default function CalculatorKeypad({
     { label: "3", value: "3", variant: "outline" },
     { label: "-", value: "-", variant: "outline" },
     { label: "Ans", value: "Ans", variant: "ghost" },
-    { label: "DEL", value: "DEL", variant: "ghost", className: "text-destructive" },
+    {
+      label: "DEL",
+      value: "DEL",
+      variant: "ghost",
+      className: "text-destructive",
+    },
 
     // Row 10
     { label: "0", value: "0", variant: "outline" },
@@ -257,7 +272,9 @@ export default function CalculatorKeypad({
       <Button
         key={index}
         variant={button.variant}
-        className={`font-semibold text-xs sm:text-sm h-full w-full ${button.className || ""}`}
+        className={`font-semibold text-xs sm:text-sm h-full w-full ${
+          button.className || ""
+        }`}
         onClick={() => onKeyPress(button.value)}
       >
         {button.label}
