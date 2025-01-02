@@ -188,7 +188,7 @@ export default function CalculatorKeypad({
     { label: ")", value: ")", shortcut: ")", variant: "ghost" },
     { label: "π", value: "π", variant: "ghost" },
     { label: "e", value: "e", shortcut: "e", variant: "ghost" },
-    { label: "i", value: "i", shortcut: "i", variant: "ghost" },
+    { label: "int", value: "int", variant: "ghost" },
     { label: "%", value: "%", shortcut: "%", variant: "ghost" },
 
     // Row 7

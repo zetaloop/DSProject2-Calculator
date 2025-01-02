@@ -27,9 +27,10 @@ function_names = {
     "arcsin",
     "arccos",
     "arctan",
+    "int",
 }
 
-suffix_ops = {"!", "i", "%"}
+suffix_ops = {"!", "%"}
 
 
 def preprocess_tokens(tokens):

@@ -41,8 +41,6 @@ def evaluate_postfix(tokens, state):
                     if x < 0 or not x.is_integer():
                         raise ValueError("阶乘只能用于非负整数")
                     result = math.factorial(int(x))
-                elif token == "i":
-                    result = complex(0, x)
                 elif token == "%":
                     result = x / 100
                 elif token == "abs":
@@ -59,6 +57,8 @@ def evaluate_postfix(tokens, state):
                     result = math.acos(x)
                 elif token == "arctan":
                     result = math.atan(x)
+                elif token == "int":
+                    result = int(x)
                 else:
                     raise ValueError(f"未知运算: {token}")
 
@@ -68,6 +68,8 @@ def evaluate_postfix(tokens, state):
                 stack.append(random.random())
 
             elif token == "Ans":
+                if state is None or "ans" not in state:
+                    raise ValueError("没有可用的上一次计算结果")
                 stack.append(state["ans"])
 
             elif token in ["(+)", "(-)"]:
