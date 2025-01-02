@@ -27,4 +27,8 @@ xcopy /s /e ..\frontend\out\ static\
 
 pyinstaller -D --noconsole --add-data "./static:static" --icon "../favicon.ico" main.py
 
+rmdir /s /q build
+rmdir /s /q static
+for /d /r . %%d in (__pycache__) do @if exist "%%d" rd /s /q "%%d"
+
 pause
