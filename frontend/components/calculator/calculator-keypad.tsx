@@ -246,6 +246,13 @@ export default function CalculatorKeypad({
   // 监听键盘事件
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // 一些常见的快捷键需要立即阻止默认行为
+      const commonShortcuts = new Set(["Enter", "Escape"]);
+
+      if (commonShortcuts.has(e.key)) {
+        e.preventDefault();
+      }
+
       // 构建当前按键组合
       const pressedKey = [];
       if (e.ctrlKey) pressedKey.push("Ctrl");
@@ -298,6 +305,7 @@ export default function CalculatorKeypad({
         ) {
           const btn = buttonRefs.current[button.shortcut];
           if (btn) {
+            e.preventDefault(); // 阻止默认行为
             btn.click();
             break;
           }
