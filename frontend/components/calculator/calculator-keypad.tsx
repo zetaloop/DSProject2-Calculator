@@ -79,7 +79,7 @@ export default function CalculatorKeypad({
           x<sup>2</sup>
         </span>
       ),
-      value: "^2",
+      value: "x^2",
       variant: "ghost",
     },
     {
@@ -88,7 +88,7 @@ export default function CalculatorKeypad({
           x<sup>3</sup>
         </span>
       ),
-      value: "^3",
+      value: "x^3",
       variant: "ghost",
     },
     {
@@ -97,7 +97,7 @@ export default function CalculatorKeypad({
           x<sup>y</sup>
         </span>
       ),
-      value: "^",
+      value: "x^y",
       variant: "ghost",
     },
     {
@@ -106,7 +106,7 @@ export default function CalculatorKeypad({
           x<sup>-1</sup>
         </span>
       ),
-      value: "^-1",
+      value: "x^-1",
       variant: "ghost",
     },
     { label: "√", value: "sqrt", variant: "ghost" },
@@ -119,7 +119,7 @@ export default function CalculatorKeypad({
           10<sup>x</sup>
         </span>
       ),
-      value: "10^",
+      value: "10^x",
       variant: "ghost",
     },
     {
@@ -131,10 +131,10 @@ export default function CalculatorKeypad({
       value: "e^x",
       variant: "ghost",
     },
-    { label: "x!", value: "!", variant: "ghost" },
+    { label: "x!", value: "x!", variant: "ghost" },
     { label: "log", value: "log", variant: "ghost" },
     { label: "ln", value: "ln", variant: "ghost" },
-    { label: "|x|", value: "abs", variant: "ghost" },
+    { label: "|x|", value: "|x|", variant: "ghost" },
 
     // Row 5
     { label: "sin", value: "sin", variant: "ghost" },
@@ -146,7 +146,7 @@ export default function CalculatorKeypad({
           sin<sup>-1</sup>
         </span>
       ),
-      value: "arcsin",
+      value: "sin^-1",
       variant: "ghost",
     },
     {
@@ -155,7 +155,7 @@ export default function CalculatorKeypad({
           cos<sup>-1</sup>
         </span>
       ),
-      value: "arccos",
+      value: "cos^-1",
       variant: "ghost",
     },
     {
@@ -164,7 +164,7 @@ export default function CalculatorKeypad({
           tan<sup>-1</sup>
         </span>
       ),
-      value: "arctan",
+      value: "tan^-1",
       variant: "ghost",
     },
 
@@ -189,8 +189,8 @@ export default function CalculatorKeypad({
     { label: "5", value: "5", variant: "outline" },
     { label: "6", value: "6", variant: "outline" },
     { label: "×", value: "*", variant: "outline" },
-    { label: "Mod", value: "mod", variant: "ghost" },
-    { label: "Ran#", value: "random", variant: "ghost" },
+    { label: "Mod", value: "Mod", variant: "ghost" },
+    { label: "Ran#", value: "Ran#", variant: "ghost" },
 
     // Row 9
     { label: "1", value: "1", variant: "outline" },
@@ -209,7 +209,7 @@ export default function CalculatorKeypad({
           ×10<sup>n</sup>
         </span>
       ),
-      value: "*10^",
+      value: "*10^n",
       variant: "outline",
     },
     { label: "+", value: "+", variant: "outline" },

@@ -46,7 +46,7 @@ export default function CalculatorPage() {
       <div className="p-4 pb-2 flex-shrink-0">
         <CalculatorDisplay
           currentValue={currentExpression}
-          previousValue={`Ans = ${currentResult}`}
+          previousValue={currentResult}
           isLoading={isLoading}
         />
       </div>
