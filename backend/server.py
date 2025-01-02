@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
 import sys
+import core
 
 def create_app(static_folder):
     app = Flask(__name__, static_folder=static_folder, static_url_path="/")
@@ -15,11 +16,14 @@ def create_app(static_folder):
         key = data["key"]
         expression = data["expression"]
 
-        # 返回更新后的表达式和结果
+        expression = core.handle_input(expression, key)
+        display = core.display(expression)
+        result = core.calculate(expression)
+
         return jsonify({
-            "expression": expression + [key],  # 将新的按键添加到表达式末尾
-            "display": " ".join(expression + [key]),  # 格式化显示
-            "result": key  # 当前结果就是最后输入的值
+            "expression": expression,
+            "display": display,
+            "result": result
         })
 
     # 默认路由，返回前端的入口页面
