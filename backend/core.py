@@ -130,7 +130,17 @@ def handle_input(expression, key):
     if key in OP_MAPEX:
         key = OP_MAPEX[key]
     else:
-        key = [key]
+        match key:
+            case "Exit":
+                import sys
+                import webview
+
+                for window in webview.windows:
+                    window.destroy()
+                sys.exit(0)
+            case _:
+                key = [key]
+
     assert isinstance(key, list)
     return expression + key
 
