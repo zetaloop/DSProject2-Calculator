@@ -61,19 +61,25 @@ def preprocess_tokens(tokens, mode: Literal["full", "display"] = "full"):
     # 2) 修正括号
     corrected = []
     unpaired_left = 0
+    unmatched_right = 0
+
     for tk in merged:
-        if tk == ")":
-            if unpaired_left <= 0:
-                corrected.append("(")
-                unpaired_left += 1
-            unpaired_left -= 1
-            corrected.append(tk)
-        elif tk == "(":
+        if tk == "(":
             unpaired_left += 1
             corrected.append(tk)
+        elif tk == ")":
+            # 如果有匹配的 '(' 则与其配对。否则计为未匹配。
+            if unpaired_left > 0:
+                unpaired_left -= 1
+                corrected.append(tk)
+            else:
+                unmatched_right += 1
+                corrected.append(tk)
         else:
             corrected.append(tk)
-
+    # 在开头插入与 unmatched_right 数量相等的 '('
+    corrected = ["("] * unmatched_right + corrected
+    # 如果还有未匹配的 '('，则在末尾添加对应的 ')'
     while unpaired_left > 0:
         corrected.append(")")
         unpaired_left -= 1

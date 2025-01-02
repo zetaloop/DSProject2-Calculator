@@ -190,5 +190,5 @@ def calculate(expression, state):
 
 def display(expression, state):
     """生成表达式的显示形式"""
-    processed = preprocess_tokens(expression, mode="full")
+    processed = preprocess_tokens(expression, mode="display")
     return " ".join(processed)
