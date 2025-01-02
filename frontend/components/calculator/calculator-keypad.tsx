@@ -73,6 +73,7 @@ export default function CalculatorKeypad({
     {
       label: "Exit",
       value: "Exit",
+      shortcut: "Ctrl+W",
       variant: "link",
       className: "text-destructive",
     },
@@ -221,8 +222,8 @@ export default function CalculatorKeypad({
     },
 
     // Row 10
-    { label: "0", value: "0", shortcut: "0", variant: "outline" },
-    { label: ".", value: ".", shortcut: ".", variant: "outline" },
+    { label: "0", value: "0", shortcut: "0,Numpad0", variant: "outline" },
+    { label: ".", value: ".", shortcut: ".,NumpadDecimal", variant: "outline" },
     {
       label: (
         <span>
@@ -232,11 +233,11 @@ export default function CalculatorKeypad({
       value: "*10^n",
       variant: "outline",
     },
-    { label: "+", value: "+", shortcut: "+", variant: "outline" },
+    { label: "+", value: "+", shortcut: "+,NumpadAdd", variant: "outline" },
     {
       label: "=",
       value: "=",
-      shortcut: "Enter",
+      shortcut: "Enter,=,NumpadEnter",
       variant: "outline",
       className: "col-span-2",
     },
@@ -245,10 +246,62 @@ export default function CalculatorKeypad({
   // 监听键盘事件
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      // 如果 buttonRefs.current[e.key] 存在，就点击该按钮
-      const btn = buttonRefs.current[e.key];
-      if (btn) {
-        btn.click();
+      // 构建当前按键组合
+      const pressedKey = [];
+      if (e.ctrlKey) pressedKey.push("Ctrl");
+      if (e.altKey) pressedKey.push("Alt");
+
+      // 对于需要 Shift 的特殊字符，我们不应该在组合键中包含 Shift
+      const shiftRequiredChars = new Set([
+        "+",
+        "*",
+        "^",
+        "!",
+        "|",
+        "(",
+        ")",
+        "%",
+        "?",
+        ":",
+        "{",
+        "}",
+        '"',
+        "<",
+        ">",
+        "~",
+      ]);
+
+      // 只有在不是特殊字符时，才添加 Shift 到组合键中
+      if (e.shiftKey && !shiftRequiredChars.has(e.key)) {
+        pressedKey.push("Shift");
+      }
+
+      // 添加主键
+      const mainKey = e.key === " " ? "Space" : e.key;
+      pressedKey.push(mainKey);
+
+      const currentKeyCombo = pressedKey.join("+");
+
+      // 遍历所有按钮配置
+      for (const button of buttonConfig) {
+        if (!button.shortcut) continue;
+
+        // 支持多个快捷键，用逗号分隔
+        const shortcuts = button.shortcut.split(",").map((s) => s.trim());
+
+        // 检查当前按键组合是否匹配任一快捷键
+        if (
+          shortcuts.some(
+            (shortcut) =>
+              shortcut.toLowerCase() === currentKeyCombo.toLowerCase()
+          )
+        ) {
+          const btn = buttonRefs.current[button.shortcut];
+          if (btn) {
+            btn.click();
+            break;
+          }
+        }
       }
     }
 
@@ -256,7 +309,7 @@ export default function CalculatorKeypad({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  });
 
   const renderButton = (button: ButtonConfig, index: number) => {
     if (button.dropdownOptions) {
