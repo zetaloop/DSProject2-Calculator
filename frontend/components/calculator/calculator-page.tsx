@@ -11,6 +11,7 @@ export default function CalculatorPage() {
   const [isError, setIsError] = useState(false);
   const [internalExpression, setInternalExpression] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAnswerState, setIsAnswerState] = useState(false);
 
   const processResult = (result: string) => {
     if (result.startsWith("Error: ")) {
@@ -28,6 +29,7 @@ export default function CalculatorPage() {
         const response = await sendInput("AC", []);
         setInternalExpression(response.expression);
         setCurrentResult(processResult(response.result));
+        setIsAnswerState(response.state.showing_answer);
       } catch (error) {
         console.error("初始化显示错误:", error);
       } finally {
@@ -43,6 +45,7 @@ export default function CalculatorPage() {
       const response = await sendInput(value, internalExpression);
       setInternalExpression(response.expression);
       setCurrentResult(processResult(response.result));
+      setIsAnswerState(response.state.showing_answer);
     } catch (error) {
       console.error("按键处理错误:", error);
     }
@@ -56,6 +59,7 @@ export default function CalculatorPage() {
           previousValue={currentResult}
           isLoading={isLoading}
           isError={isError}
+          isAnswerState={isAnswerState}
         />
       </div>
       <CalculatorKeypad

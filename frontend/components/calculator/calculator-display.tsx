@@ -6,6 +6,7 @@ interface CalculatorDisplayProps {
   previousValue: string;
   isLoading?: boolean;
   isError?: boolean;
+  isAnswerState?: boolean;
 }
 
 export default function CalculatorDisplay({
@@ -13,6 +14,7 @@ export default function CalculatorDisplay({
   previousValue,
   isLoading = false,
   isError = false,
+  isAnswerState = false,
 }: CalculatorDisplayProps) {
   // 将 tokens 映射到真正的 JSX
   const renderTokens = () => {
@@ -35,7 +37,9 @@ export default function CalculatorDisplay({
     <Card>
       <CardHeader className="pb-2">
         <div
-          className="text-right text-2xl font-mono h-8 mb-1 overflow-hidden whitespace-nowrap text-ellipsis"
+          className={`text-right text-2xl font-mono h-8 mb-1 overflow-hidden whitespace-nowrap text-ellipsis ${
+            isAnswerState ? "text-muted-foreground" : ""
+          }`}
           aria-live="polite"
         >
           {isLoading ? (
@@ -48,7 +52,11 @@ export default function CalculatorDisplay({
       <CardContent className="pt-0 pb-4">
         <div
           className={`text-right text-sm font-mono h-5 overflow-hidden whitespace-nowrap text-ellipsis ${
-            isError ? "text-red-500" : "text-muted-foreground"
+            isError
+              ? "text-red-500"
+              : isAnswerState
+              ? ""
+              : "text-muted-foreground"
           }`}
           aria-live="polite"
         >

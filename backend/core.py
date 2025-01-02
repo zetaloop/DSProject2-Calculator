@@ -108,7 +108,7 @@ def evaluate_postfix(tokens):
     return stack[0]
 
 
-def handle_input(expression, key):
+def handle_input(expression, state, key):
     """处理输入按键，维护 expression 数组，并将 '|' 视为光标位置。"""
 
     # 如果 expression 里没有光标，则默认加在末尾
@@ -117,7 +117,6 @@ def handle_input(expression, key):
 
     cursor_index = expression.index("|")
 
-    # 先做一些映射（与原先一样），比如 "x^2" -> ["^", "2"] 等
     OP_MAPEX = {
         "": [],
         "MC": ["M"],
@@ -136,15 +135,21 @@ def handle_input(expression, key):
         "Ran#": ["Random"],
         "*10^n": ["*", "10", "^"],
     }
-
     # key 可能被映射为列表
     mapped_key = OP_MAPEX.get(key, None)
-
     if mapped_key is not None:
         key_list = mapped_key
     else:
+        # 重置答案状态
+        if "showing_answer" not in state:
+            state["showing_answer"] = False
+        previous_showing_answer = state["showing_answer"]
+        state["showing_answer"] = False
         # 处理特殊按键
         match key:
+            case "=":
+                state["showing_answer"] = True
+                key_list = []
             case "DEL":
                 # 删除光标左侧的一个 token
                 if cursor_index > 0:
@@ -166,7 +171,10 @@ def handle_input(expression, key):
                         expression[cursor_index],
                     )
                     cursor_index -= 1
+                # 不改变答案状态
+                state["showing_answer"] = previous_showing_answer
                 key_list = []
+                print(f"showing_answer: {state['showing_answer']}")
             case "→":
                 # 光标右移
                 if cursor_index < len(expression) - 1:
@@ -175,6 +183,8 @@ def handle_input(expression, key):
                         expression[cursor_index],
                     )
                     cursor_index += 1
+                # 不改变答案状态
+                state["showing_answer"] = previous_showing_answer
                 key_list = []
             case "Exit":
                 import sys

@@ -17,12 +17,12 @@ def create_app(static_folder):
 
         key: str = data["key"]
         expression: list[str] = data["expression"]
-        state: dict[str, Any] = data["state"]
+        state: dict[str, Any] = data.get("state", {})
 
-        expression: list[str] = core.handle_input(expression, key)
+        expression: list[str] = core.handle_input(expression, state, key)
         result = core.calculate(expression, state)
 
-        return jsonify({"expression": expression, "result": result})
+        return jsonify({"expression": expression, "state": state, "result": result})
 
     # 默认路由，返回前端的入口页面
     @app.route("/", defaults={"path": ""})
