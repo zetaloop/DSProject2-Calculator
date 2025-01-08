@@ -1,4 +1,6 @@
-# 科学计算器应用
+# 科学计算器应用（课程作业）
+
+<img width="400" alt="Snipaste_2025-01-08_10-54-40" src="https://github.com/user-attachments/assets/116067a5-520a-40dd-ae24-a31bf51a8d8f" />
 
 这是一个现代化的科学计算器应用，采用前后端分离架构，具有以下特点：
 
